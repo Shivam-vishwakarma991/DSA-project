@@ -1,5 +1,5 @@
 import api from './index';
-import { Topic, Problem } from '@/types';
+import { Topic, Problem } from '../../types';
 
 export const topicsAPI = {
   getTopics: (params?: { page?: number; limit?: number; sort?: string }) => 

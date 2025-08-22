@@ -1,5 +1,5 @@
 import api from './index';
-import { Progress, UserStats, StreakInfo } from '@/types';
+import { Progress, UserStats, StreakInfo } from '../../types';
 
 export const progressAPI = {
   getUserProgress: (userId: string, params?: { 

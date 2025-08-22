@@ -1,5 +1,5 @@
 import api from './index';
-import { LoginCredentials, RegisterData, User } from '@/types';
+import { LoginCredentials, RegisterData, User } from '../../types';
 
 export const authAPI = {
   login: (credentials: LoginCredentials) => 

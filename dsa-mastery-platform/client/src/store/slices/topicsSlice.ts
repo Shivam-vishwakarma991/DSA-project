@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { topicsAPI } from '@/lib/api/topics';
-import { Topic, Problem } from '@/types';
+import { topicsAPI } from '../../lib/api/topics';
+import { Topic, Problem } from '../../types';
 
 interface TopicsState {
   topics: Topic[];

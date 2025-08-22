@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import { progressAPI } from '@/lib/api/progress';
-import { Progress, UserStats, StreakInfo } from '@/types';
+import { progressAPI } from '../../lib/api/progress';
+import { Progress, UserStats, StreakInfo } from '../../types';
 
 interface ProgressState {
   userProgress: Progress[];

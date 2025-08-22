@@ -1,6 +1,3 @@
-// ============================================
-// client/src/app/(auth)/signup/page.tsx - COMPLETE
-// ============================================
 'use client';
 
 import { useState, useEffect } from 'react';

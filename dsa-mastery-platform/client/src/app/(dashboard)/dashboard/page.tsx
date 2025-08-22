@@ -8,11 +8,11 @@ import { fetchTopics } from '@/store/slices/topicsSlice';
 import { fetchUserProgress } from '@/store/slices/progressSlice';
 import StatsOverview from '@/components/dashboard/StatsOverview';
 import TopicGrid from '@/components/dashboard/TopicGrid';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
-import ProgressChart from '@/components/dashboard/ProgressChart';
-import RecentActivity from '@/components/dashboard/RecentActivity';
-import StreakTracker from '@/components/dashboard/StreakTracker';
-import GuidedTour from '@/components/features/GuidedTour';
+import DashboardHeader from '../../../components/dashboard/DashboardHeader';
+import ProgressChart from '../../../components/dashboard/ProgressChart';
+import RecentActivity from '../../../components/dashboard/RecentActivity';
+// import StreakTracker from '../../../components/dashboard/StreakTracker';
+// import GuidedTour from '../../../components/features/GuidedTour';
 import { Loader } from '../../../components/common/Loader';
 
 export default function DashboardPage() {
@@ -42,7 +42,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Guided Tour for First-time Users */}
-      {showTour && <GuidedTour onComplete={() => setShowTour(false)} />}
+      {/* {showTour && <GuidedTour onComplete={() => setShowTour(false)} />} */}
       
       {/* Dashboard Header */}
       <DashboardHeader user={user} />
@@ -102,7 +102,7 @@ export default function DashboardPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <StreakTracker streak={streak} />
+              {/* <StreakTracker streak={streak} /> */}
             </motion.div>
 
             {/* Recent Activity */}
