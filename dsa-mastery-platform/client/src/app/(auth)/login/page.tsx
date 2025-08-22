@@ -9,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
-// import { login } from '@/store/slices/authSlice';
+import { login } from '@/store/slices/authSlice';
 import toast from 'react-hot-toast';
 import { 
   EnvelopeIcon, 
@@ -31,8 +31,8 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const router = useRouter();
-  // const dispatch = useDispatch<AppDispatch>();
-  // const { loading, error, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+  const { loading, error, isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -46,24 +46,24 @@ export default function LoginPage() {
     },
   });
 
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     router.push('/dashboard');
-  //   }
-  // }, [isAuthenticated, router]);
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/dashboard');
+    }
+  }, [isAuthenticated, router]);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     toast.error(error);
-  //   }
-  // }, [error]);
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      // await dispatch(login({
-      //   email: data.email,
-      //   password: data.password,
-      // })).unwrap();
+      await dispatch(login({
+        email: data.email,
+        password: data.password,
+      })).unwrap();
       
       toast.success('Welcome back! 🎉');
       router.push('/dashboard');

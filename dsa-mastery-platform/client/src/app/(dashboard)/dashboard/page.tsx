@@ -6,14 +6,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
 import { fetchTopics } from '@/store/slices/topicsSlice';
 import { fetchUserProgress } from '@/store/slices/progressSlice';
-import DashboardHeader from '@/components/dashboard/DashboardHeader';
 import StatsOverview from '@/components/dashboard/StatsOverview';
-import ProgressChart from '@/components/dashboard/ProgressChart';
 import TopicGrid from '@/components/dashboard/TopicGrid';
+import DashboardHeader from '@/components/dashboard/DashboardHeader';
+import ProgressChart from '@/components/dashboard/ProgressChart';
 import RecentActivity from '@/components/dashboard/RecentActivity';
 import StreakTracker from '@/components/dashboard/StreakTracker';
 import GuidedTour from '@/components/features/GuidedTour';
-import { Loader } from '@/components/common/Loader';
+import { Loader } from '../../../components/common/Loader';
 
 export default function DashboardPage() {
   const dispatch = useDispatch<AppDispatch>();
