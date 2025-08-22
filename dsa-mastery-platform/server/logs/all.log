@@ -7,3 +7,228 @@
 2025-08-22 21:47:28:4728 [32minfo[39m: [32mCreated 4 topics[39m
 2025-08-22 21:47:28:4728 [32minfo[39m: [32mCreated sample problems[39m
 2025-08-22 21:47:28:4728 [32minfo[39m: [32mCreated admin user[39m
+2025-08-22 21:50:13:5013 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:51:57:5157 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:52:10:5210 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:52:16:5216 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:52:37:5237 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:52:37:5237 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 21:52:37:5237 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 21:52:58:5258 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:52:58:5258 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 21:52:58:5258 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 21:52:59:5259 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:53:22:5322 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:53:22:5322 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:53:22:5322 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 21:53:22:5322 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 21:53:30:5330 [33mwarn[39m: [33mMongoDB disconnected[39m
+2025-08-22 21:54:35:5435 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:54:55:5455 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:55:30:5530 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:57:16:5716 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:57:44:5744 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:58:46:5846 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:58:56:5856 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:59:39:5939 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:00:10:010 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:00:19:019 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:00:19:019 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:00:19:019 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:00:42:042 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:01:01:11 [33mwarn[39m: [33mMongoDB disconnected[39m
+2025-08-22 22:01:05:15 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:01:05:15 [32minfo[39m: [32m🚀 Server running on port 5003[39m
+2025-08-22 22:01:05:15 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:01:30:130 [33mwarn[39m: [33mMongoDB disconnected[39m
+2025-08-22 22:01:50:150 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:01:50:150 [32minfo[39m: [32m🚀 Server running on port 5003[39m
+2025-08-22 22:01:50:150 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:08:01:81 [31merror[39m: [31mEmail sending failed: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to[39m
+[31m535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-3254aa63db2sm316391a91.23 - gsmtp[39m
+2025-08-22 22:08:01:81 [31merror[39m: [31mRegistration error: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to[39m
+[31m535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-3254aa63db2sm316391a91.23 - gsmtp[39m
+2025-08-22 22:10:39:1039 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:10:39:1039 [32minfo[39m: [32m🚀 Server running on port 5003[39m
+2025-08-22 22:10:39:1039 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:10:53:1053 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:10:53:1053 [32minfo[39m: [32m🚀 Server running on port 5003[39m
+2025-08-22 22:10:53:1053 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:11:44:1144 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:11:44:1144 [32minfo[39m: [32m🚀 Server running on port 5003[39m
+2025-08-22 22:11:44:1144 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:16:17:1617 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:16:17:1617 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:16:17:1617 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:16:35:1635 [33mwarn[39m: [33mMongoDB disconnected[39m
+2025-08-22 22:17:03:173 [33mwarn[39m: [33mMongoDB disconnected[39m
+2025-08-22 22:17:56:1756 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:17:56:1756 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:17:56:1756 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:21:35:2135 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:21:35:2135 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:21:35:2135 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:22:35:2235 [32minfo[39m: [32mUser logged in: shivamviswakarma@askgalore.com[39m
+2025-08-22 22:24:31:2431 [32minfo[39m: [32mUser logged in: shivamviswakarma@askgalore.com[39m
+2025-08-22 22:26:06:266 [32minfo[39m: [32mUser logged in: shivamviswakarma@askgalore.com[39m
+2025-08-22 22:27:48:2748 [32minfo[39m: [32mUser logged in: shivamviswakarma@askgalore.com[39m
+2025-08-22 22:31:36:3136 [32minfo[39m: [32mUser logged in: shivamviswakarma@askgalore.com[39m
+2025-08-22 22:38:03:383 [32minfo[39m: [32mUser logged in: shivamviswakarma@askgalore.com[39m
+2025-08-22 22:42:09:429 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:42:09:429 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:42:09:429 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:42:15:4215 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:42:15:4215 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:42:15:4215 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:42:20:4220 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:42:20:4220 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:42:20:4220 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:42:30:4230 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:42:30:4230 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:42:30:4230 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:42:34:4234 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:42:34:4234 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:42:34:4234 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:44:17:4417 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:44:17:4417 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:44:17:4417 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:44:24:4424 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:44:24:4424 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:44:24:4424 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:44:31:4431 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:44:31:4431 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:44:31:4431 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:44:46:4446 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:44:46:4446 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:44:46:4446 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:44:49:4449 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:44:49:4449 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:44:49:4449 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:44:53:4453 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:44:53:4453 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:44:53:4453 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:45:00:450 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:45:00:450 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:45:00:450 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:59:20:5920 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 22:59:21:5921 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 22:59:51:5951 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 22:59:51:5951 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 22:59:51:5951 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 22:59:58:5958 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 22:59:59:5959 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 23:01:19:119 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:01:19:119 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:01:19:119 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:01:26:126 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:01:26:126 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:01:26:126 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:01:27:127 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:01:27:127 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:01:27:127 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:01:30:130 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:01:30:130 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:01:30:130 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:01:35:135 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:01:35:135 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:01:35:135 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:01:41:141 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:01:41:141 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:01:41:141 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:01:45:145 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:01:47:147 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:01:47:147 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:01:47:147 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:02:01:21 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:02:01:21 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:02:01:21 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:02:06:26 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:02:07:27 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:02:07:27 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:02:14:214 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 23:02:15:215 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 23:04:44:444 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:04:44:444 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:04:44:444 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:04:47:447 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:04:47:447 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:04:47:447 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:05:09:59 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:05:09:59 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:05:09:59 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:05:11:511 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:05:11:511 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:05:11:511 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:05:20:520 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 23:05:20:520 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 23:05:58:558 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:05:58:558 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:05:58:558 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:06:00:60 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:06:00:60 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:06:00:60 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:06:04:64 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 23:06:05:65 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 23:06:05:65 [31merror[39m: [31m❌ Seed failed: E11000 duplicate key error collection: test.topics index: slug_1 dup key: { slug: "arrays" }[39m
+2025-08-22 23:06:52:652 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:06:52:652 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:06:52:652 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:07:01:71 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 23:07:02:72 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 23:07:02:72 [32minfo[39m: [32mCleared existing collections[39m
+2025-08-22 23:07:02:72 [31merror[39m: [31m❌ Seed failed: E11000 duplicate key error collection: test.topics index: slug_1 dup key: { slug: "arrays" }[39m
+2025-08-22 23:07:22:722 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:07:22:722 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:07:22:722 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:07:25:725 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:07:25:725 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:07:25:725 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:08:08:88 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:08:08:88 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:08:08:88 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:08:10:810 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:08:10:810 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:08:10:810 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:08:20:820 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 23:08:20:820 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 23:08:20:820 [31merror[39m: [31m❌ Seed failed: E11000 duplicate key error collection: test.topics index: slug_1 dup key: { slug: "arrays" }[39m
+2025-08-22 23:08:42:842 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 23:08:43:843 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 23:08:43:843 [31merror[39m: [31m❌ Seed failed: E11000 duplicate key error collection: test.topics index: slug_1 dup key: { slug: "arrays" }[39m
+2025-08-22 23:09:46:946 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:09:46:946 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:09:46:946 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:09:51:951 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:09:51:951 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:09:51:951 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:10:03:103 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:10:03:103 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:10:03:103 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:10:16:1016 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 23:10:16:1016 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 23:10:16:1016 [32minfo[39m: [32mCreated 18 topics[39m
+2025-08-22 23:10:17:1017 [32minfo[39m: [32mCreated 18 problems[39m
+2025-08-22 23:10:22:1022 [32minfo[39m: [32mCreated 16 users[39m
+2025-08-22 23:10:40:1040 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:10:40:1040 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:10:40:1040 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:10:48:1048 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:10:48:1048 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:10:48:1048 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:11:20:1120 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 23:11:20:1120 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 23:11:21:1121 [32minfo[39m: [32mCreated 18 topics[39m
+2025-08-22 23:11:21:1121 [32minfo[39m: [32mCreated 18 problems[39m
+2025-08-22 23:11:26:1126 [32minfo[39m: [32mCreated 16 users[39m
+2025-08-22 23:11:26:1126 [32minfo[39m: [32mCreated 48 progress records[39m
+2025-08-22 23:11:33:1133 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:11:33:1133 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:11:33:1133 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:12:03:123 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:12:03:123 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:12:03:123 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-22 23:14:22:1422 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-22 23:14:32:1432 [33mwarn[39m: [33mMongoDB disconnected[39m
+2025-08-22 23:15:07:157 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 23:15:07:157 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-22 23:15:07:157 [32minfo[39m: [32m📝 Environment: development[39m

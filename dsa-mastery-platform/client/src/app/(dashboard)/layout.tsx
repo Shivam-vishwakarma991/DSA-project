@@ -17,17 +17,20 @@ export default function DashboardLayout({
   const { isAuthenticated, loading } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
+    // Only redirect if we're not loading and definitely not authenticated
     if (!loading && !isAuthenticated) {
       router.push('/login');
     }
   }, [isAuthenticated, loading, router]);
 
+  // Show loading while checking authentication
   if (loading) {
-    return <Loader fullScreen />;
+    return <Loader fullScreen text="Loading..." />;
   }
 
+  // Don't render anything while checking authentication
   if (!isAuthenticated) {
-    return null;
+    return <Loader fullScreen text="Redirecting to login..." />;
   }
 
   return (

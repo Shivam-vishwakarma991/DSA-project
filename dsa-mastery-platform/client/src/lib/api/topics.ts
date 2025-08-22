@@ -1,19 +1,47 @@
 import api from './index';
 import { Topic, Problem } from '../../types';
 
+// API Response interfaces
+interface TopicsResponse {
+  success: boolean;
+  data: Topic[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
+
+interface TopicResponse {
+  success: boolean;
+  data: Topic;
+}
+
+interface ProblemsResponse {
+  success: boolean;
+  data: Problem[];
+  pagination?: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
+
 export const topicsAPI = {
   getTopics: (params?: { page?: number; limit?: number; sort?: string }) => 
-    api.get<Topic[]>('/topics', { params }),
+    api.get<TopicsResponse>('/topics', { params }),
 
   getTopicBySlug: (slug: string) => 
-    api.get<Topic>(`/topics/${slug}`),
+    api.get<TopicResponse>(`/topics/${slug}`),
 
   getTopicProblems: (slug: string, params?: { 
     page?: number; 
     limit?: number; 
     difficulty?: string 
   }) => 
-    api.get<Problem[]>(`/topics/${slug}/problems`, { params }),
+    api.get<ProblemsResponse>(`/topics/${slug}/problems`, { params }),
 
   getTopicResources: (slug: string) => 
     api.get(`/topics/${slug}/resources`),
@@ -34,8 +62,8 @@ export const topicsAPI = {
     tags?: string;
     search?: string;
   }) => 
-    api.get<Problem[]>('/topics/problems/all', { params }),
+    api.get<ProblemsResponse>('/topics/problems/all', { params }),
 
   getProblem: (id: string) => 
-    api.get<Problem>(`/topics/problems/${id}`),
+    api.get<{ success: boolean; data: Problem }>(`/topics/problems/${id}`),
 };

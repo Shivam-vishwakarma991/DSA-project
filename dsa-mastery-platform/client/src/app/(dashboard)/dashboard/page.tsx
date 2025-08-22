@@ -97,7 +97,7 @@ export default function DashboardPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <TopicGrid topics={topics} userProgress={userProgress} />
+              <TopicGrid topics={topics} userProgress={userProgress} loading={topicsLoading} />
             </motion.div>
           </div>
 

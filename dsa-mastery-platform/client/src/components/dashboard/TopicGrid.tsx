@@ -15,6 +15,7 @@ import {
 interface TopicGridProps {
   topics: Topic[];
   userProgress: Progress[];
+  loading?: boolean;
 }
 
 const topicIcons: { [key: string]: any } = {
@@ -28,11 +29,15 @@ const topicIcons: { [key: string]: any } = {
   'searching': PuzzlePieceIcon,
 };
 
-export default function TopicGrid({ topics, userProgress }: TopicGridProps) {
+export default function TopicGrid({ topics, userProgress, loading = false }: TopicGridProps) {
+  // Add null checks and default values
+  const safeTopics = topics || [];
+  const safeUserProgress = userProgress || [];
+
   const getTopicProgress = (topicId: string) => {
-    const topicProblems = userProgress.filter(p => p.topicId === topicId);
+    const topicProblems = safeUserProgress.filter(p => p.topicId === topicId);
     const completed = topicProblems.filter(p => p.status === 'completed').length;
-    const total = topics.find(t => t._id === topicId)?.totalProblems || 1;
+    const total = safeTopics.find(t => t._id === topicId)?.totalProblems || 1;
     return (completed / total) * 100;
   };
 
@@ -60,7 +65,33 @@ export default function TopicGrid({ topics, userProgress }: TopicGridProps) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {topics.slice(0, 6).map((topic, index) => {
+        {loading ? (
+          // Loading skeleton
+          Array.from({ length: 6 }).map((_, index) => (
+            <div key={index} className="bg-gray-100 dark:bg-gray-700 rounded-xl p-4 animate-pulse">
+              <div className="flex items-start space-x-4">
+                <div className="w-12 h-12 bg-gray-200 dark:bg-gray-600 rounded-lg"></div>
+                <div className="flex-1">
+                  <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-3/4 mb-2"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-full mb-1"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-2/3"></div>
+                </div>
+              </div>
+            </div>
+          ))
+        ) : safeTopics.length === 0 ? (
+          // Empty state
+          <div className="col-span-2 text-center py-8">
+            <CodeBracketIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+              No topics available
+            </h3>
+            <p className="text-gray-500 dark:text-gray-400">
+              Topics will appear here once they're loaded.
+            </p>
+          </div>
+        ) : (
+          safeTopics.slice(0, 6).map((topic, index) => {
           const progress = getTopicProgress(topic._id);
           const Icon = topicIcons[topic.slug] || CodeBracketIcon;
           
@@ -124,7 +155,8 @@ export default function TopicGrid({ topics, userProgress }: TopicGridProps) {
               </Link>
             </motion.div>
           );
-        })}
+        })
+        )}
       </div>
     </div>
   );

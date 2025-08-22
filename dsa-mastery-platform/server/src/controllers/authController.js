@@ -56,6 +56,8 @@ exports.register = async (req, res, next) => {
     }
     
     const { username, email, password, fullName } = req.body;
+
+    console.log(req.body);
     
     // Check if user exists
     const existingUser = await User.findOne({
@@ -90,8 +92,8 @@ exports.register = async (req, res, next) => {
     
     await user.save();
     
-    // Send welcome email
-    await emailService.sendWelcomeEmail(user, verificationToken);
+    // Send welcome email (commented out for testing)
+    // await emailService.sendWelcomeEmail(user, verificationToken);
     
     logger.info(`New user registered: ${user.email}`);
     sendTokenResponse(user, 201, res);

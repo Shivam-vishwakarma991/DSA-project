@@ -2,3 +2,33 @@
 2025-08-22 21:46:21:4621 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
 2025-08-22 21:46:31:4631 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
 2025-08-22 21:46:46:4646 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:50:13:5013 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:51:57:5157 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:52:10:5210 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:52:16:5216 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:52:59:5259 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:53:22:5322 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:54:35:5435 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:54:55:5455 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:55:30:5530 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:57:16:5716 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:57:44:5744 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:58:46:5846 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:58:56:5856 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 21:59:39:5939 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 22:00:10:010 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 22:00:42:042 [31merror[39m: [31mUNCAUGHT EXCEPTION! 💥 Shutting down...[39m
+2025-08-22 22:08:01:81 [31merror[39m: [31mEmail sending failed: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to[39m
+[31m535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-3254aa63db2sm316391a91.23 - gsmtp[39m
+2025-08-22 22:08:01:81 [31merror[39m: [31mRegistration error: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to[39m
+[31m535 5.7.8  https://support.google.com/mail/?p=BadCredentials 98e67ed59e1d1-3254aa63db2sm316391a91.23 - gsmtp[39m
+2025-08-22 22:59:21:5921 [31merror[39m: [31m❌ Seed failed: Cannot access 'stringTopic' before initialization[39m
+2025-08-22 22:59:59:5959 [31merror[39m: [31m❌ Seed failed: Cannot access 'stringTopic' before initialization[39m
+2025-08-22 23:02:15:215 [31merror[39m: [31m❌ Seed failed: Cannot read properties of undefined (reading '_id')[39m
+2025-08-22 23:05:20:520 [31merror[39m: [31m❌ Seed failed: insertedTopics is not defined[39m
+2025-08-22 23:06:05:65 [31merror[39m: [31m❌ Seed failed: E11000 duplicate key error collection: test.topics index: slug_1 dup key: { slug: "arrays" }[39m
+2025-08-22 23:07:02:72 [31merror[39m: [31m❌ Seed failed: E11000 duplicate key error collection: test.topics index: slug_1 dup key: { slug: "arrays" }[39m
+2025-08-22 23:08:20:820 [31merror[39m: [31m❌ Seed failed: E11000 duplicate key error collection: test.topics index: slug_1 dup key: { slug: "arrays" }[39m
+2025-08-22 23:08:43:843 [31merror[39m: [31m❌ Seed failed: E11000 duplicate key error collection: test.topics index: slug_1 dup key: { slug: "arrays" }[39m
+2025-08-22 23:10:22:1022 [31merror[39m: [31m❌ Seed failed: Progress validation failed: problemId: Path `problemId` is required.[39m
+2025-08-22 23:14:22:1422 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m

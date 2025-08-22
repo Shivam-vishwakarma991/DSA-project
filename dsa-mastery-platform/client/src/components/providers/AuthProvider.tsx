@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
-import { refreshToken, setUser } from '@/store/slices/authSlice';
+import { refreshToken, setUser, getCurrentUser, setLoading } from '@/store/slices/authSlice';
 import { Loader } from '@/components/common/Loader';
 import Cookies from 'js-cookie';
+import api from '@/lib/api';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,24 +38,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else if (token && !isAuthenticated) {
         // Validate token by fetching user profile
         try {
-          const response = await fetch('/api/users/profile', {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          
-          if (response.ok) {
-            const data = await response.json();
-            dispatch(setUser(data.user));
-          } else {
-            // Token is invalid
-            Cookies.remove('token');
-            Cookies.remove('refreshToken');
-          }
+          await dispatch(getCurrentUser()).unwrap();
         } catch (error) {
           console.error('Failed to validate token:', error);
+          // Token is invalid
+          Cookies.remove('token');
+          Cookies.remove('refreshToken');
         }
       }
+      
+      // Set loading to false after initialization
+      dispatch(setLoading(false));
     };
 
     initAuth();

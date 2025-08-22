@@ -2,10 +2,10 @@
     "name": "dsa-mastery-backend",
     "version": "1.0.0",
     "description": "Production-grade backend for DSA Mastery Platform",
-    "main": "src/server.js",
+    "main": "server.js",
     "scripts": {
-        "dev": "nodemon src/server.js",
-        "start": "node src/server.js",
+        "dev": "nodemon server.js",
+        "start": "node server.js",
         "test": "jest --watch",
         "test:ci": "jest --ci --coverage",
         "lint": "eslint src/",

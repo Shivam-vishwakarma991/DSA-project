@@ -2,6 +2,18 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import { topicsAPI } from '../../lib/api/topics';
 import { Topic, Problem } from '../../types';
 
+// API Response interface
+interface TopicsResponse {
+  success: boolean;
+  data: Topic[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
+
 interface TopicsState {
   topics: Topic[];
   currentTopic: Topic | null;
@@ -32,7 +44,7 @@ export const fetchTopics = createAsyncThunk(
   'topics/fetchTopics',
   async () => {
     const response = await topicsAPI.getTopics();
-    return response.data;
+    return response.data.data; // Extract topics from nested data structure
   }
 );
 
@@ -40,7 +52,7 @@ export const fetchTopicDetails = createAsyncThunk(
   'topics/fetchTopicDetails',
   async (slug: string) => {
     const response = await topicsAPI.getTopicBySlug(slug);
-    return response.data;
+    return response.data.data; // Extract topic from nested data structure
   }
 );
 
@@ -48,7 +60,7 @@ export const fetchTopicProblems = createAsyncThunk(
   'topics/fetchTopicProblems',
   async (slug: string) => {
     const response = await topicsAPI.getTopicProblems(slug);
-    return response.data;
+    return response.data.data; // Extract problems from nested data structure
   }
 );
 

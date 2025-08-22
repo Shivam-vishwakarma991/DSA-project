@@ -25,4 +25,7 @@ export const authAPI = {
 
   updatePassword: (currentPassword: string, newPassword: string) => 
     api.put('/auth/update-password', { currentPassword, newPassword }),
+
+  getCurrentUser: () => 
+    api.get<{ success: boolean; data: User }>('/users/profile'),
 };

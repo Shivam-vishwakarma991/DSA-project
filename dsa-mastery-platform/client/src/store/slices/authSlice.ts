@@ -12,7 +12,7 @@ interface AuthState {
 const initialState: AuthState = {
   user: null,
   isAuthenticated: false,
-  loading: false,
+  loading: true, // Start with loading true to prevent immediate redirects
   error: null,
 };
 
@@ -41,6 +41,11 @@ export const refreshToken = createAsyncThunk('auth/refresh', async () => {
   return response.data;
 });
 
+export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async () => {
+  const response = await authAPI.getCurrentUser();
+  return response.data;
+});
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -51,6 +56,9 @@ const authSlice = createSlice({
     },
     clearError: (state) => {
       state.error = null;
+    },
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.loading = action.payload;
     },
     updateUserStats: (state, action: PayloadAction<Partial<User['stats']>>) => {
       if (state.user) {
@@ -97,9 +105,23 @@ const authSlice = createSlice({
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.isAuthenticated = true;
+      })
+      // Get current user
+      .addCase(getCurrentUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getCurrentUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload.data;
+        state.isAuthenticated = true;
+      })
+      .addCase(getCurrentUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to get user profile';
       });
   },
 });
 
-export const { setUser, clearError, updateUserStats } = authSlice.actions;
+export const { setUser, clearError, setLoading, updateUserStats } = authSlice.actions;
 export default authSlice.reducer;
