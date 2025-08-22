@@ -65,12 +65,37 @@ exports.getTopic = asyncHandler(async (req, res) => {
 // @route   POST /api/topics
 // @access  Private/Admin
 exports.createTopic = asyncHandler(async (req, res) => {
-  const topic = await Topic.create(req.body);
+  const { problems, ...topicData } = req.body;
+  
+  // Create the topic
+  const topic = await Topic.create(topicData);
+
+  // Create problems if provided
+  if (problems && Array.isArray(problems) && problems.length > 0) {
+    const problemsToCreate = problems.map(problem => {
+      // Remove temporary ID and other fields that shouldn't be in new problems
+      const { _id, id, createdAt, updatedAt, ...cleanProblem } = problem;
+      return {
+        ...cleanProblem,
+        topicId: topic._id,
+        isActive: true
+      };
+    });
+    
+    await Problem.insertMany(problemsToCreate);
+    
+    // Update topic with totalProblems count
+    topic.totalProblems = problems.length;
+    await topic.save();
+  }
+
+  // Fetch the topic with populated problems
+  const populatedTopic = await Topic.findById(topic._id).populate('problems');
 
   res.status(201).json({
     success: true,
     message: MESSAGES.CRUD.CREATE_SUCCESS,
-    data: topic,
+    data: populatedTopic,
   });
 });
 
@@ -78,9 +103,12 @@ exports.createTopic = asyncHandler(async (req, res) => {
 // @route   PUT /api/topics/:id
 // @access  Private/Admin
 exports.updateTopic = asyncHandler(async (req, res) => {
+  const { problems, ...topicData } = req.body;
+  
+  // Update the topic
   const topic = await Topic.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    topicData,
     {
       new: true,
       runValidators: true,
@@ -94,10 +122,44 @@ exports.updateTopic = asyncHandler(async (req, res) => {
     });
   }
 
+  // Handle problems update if provided
+  if (problems && Array.isArray(problems)) {
+    // Remove temporary IDs and update existing problems
+    const problemsToUpdate = problems.filter(p => !p._id.startsWith('temp_'));
+    const problemsToCreate = problems.filter(p => p._id.startsWith('temp_'));
+    
+    // Update existing problems
+    for (const problem of problemsToUpdate) {
+      await Problem.findByIdAndUpdate(problem._id, problem, { new: true });
+    }
+    
+    // Create new problems
+    if (problemsToCreate.length > 0) {
+      const newProblems = problemsToCreate.map(problem => {
+        // Remove temporary ID and other fields that shouldn't be in new problems
+        const { _id, id, createdAt, updatedAt, ...cleanProblem } = problem;
+        return {
+          ...cleanProblem,
+          topicId: topic._id,
+          isActive: true
+        };
+      });
+      
+      await Problem.insertMany(newProblems);
+    }
+    
+    // Update topic with totalProblems count
+    topic.totalProblems = problems.length;
+    await topic.save();
+  }
+
+  // Fetch the topic with populated problems
+  const populatedTopic = await Topic.findById(topic._id).populate('problems');
+
   res.status(200).json({
     success: true,
     message: MESSAGES.CRUD.UPDATE_SUCCESS,
-    data: topic,
+    data: populatedTopic,
   });
 });
 

@@ -64,6 +64,30 @@ export const fetchTopicProblems = createAsyncThunk(
   }
 );
 
+export const createTopic = createAsyncThunk(
+  'topics/createTopic',
+  async (topicData: Partial<Topic>) => {
+    const response = await topicsAPI.createTopic(topicData);
+    return response.data;
+  }
+);
+
+export const updateTopic = createAsyncThunk(
+  'topics/updateTopic',
+  async ({ id, data }: { id: string; data: Partial<Topic> }) => {
+    const response = await topicsAPI.updateTopic(id, data);
+    return response.data;
+  }
+);
+
+export const deleteTopic = createAsyncThunk(
+  'topics/deleteTopic',
+  async (id: string) => {
+    await topicsAPI.deleteTopic(id);
+    return id;
+  }
+);
+
 const topicsSlice = createSlice({
   name: 'topics',
   initialState,
@@ -124,6 +148,54 @@ const topicsSlice = createSlice({
       .addCase(fetchTopicProblems.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to fetch problems';
+      })
+      // Create Topic
+      .addCase(createTopic.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createTopic.fulfilled, (state, action) => {
+        state.loading = false;
+        state.topics.unshift(action.payload);
+      })
+      .addCase(createTopic.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to create topic';
+      })
+      // Update Topic
+      .addCase(updateTopic.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateTopic.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.topics.findIndex(topic => topic._id === action.payload._id);
+        if (index !== -1) {
+          state.topics[index] = action.payload;
+        }
+        if (state.currentTopic && state.currentTopic._id === action.payload._id) {
+          state.currentTopic = action.payload;
+        }
+      })
+      .addCase(updateTopic.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to update topic';
+      })
+      // Delete Topic
+      .addCase(deleteTopic.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteTopic.fulfilled, (state, action) => {
+        state.loading = false;
+        state.topics = state.topics.filter(topic => topic._id !== action.payload);
+        if (state.currentTopic && state.currentTopic._id === action.payload) {
+          state.currentTopic = null;
+        }
+      })
+      .addCase(deleteTopic.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to delete topic';
       });
   },
 });

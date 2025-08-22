@@ -32,3 +32,9 @@
 2025-08-22 23:08:43:843 [31merror[39m: [31m❌ Seed failed: E11000 duplicate key error collection: test.topics index: slug_1 dup key: { slug: "arrays" }[39m
 2025-08-22 23:10:22:1022 [31merror[39m: [31m❌ Seed failed: Progress validation failed: problemId: Path `problemId` is required.[39m
 2025-08-22 23:14:22:1422 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:23:51:2351 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:24:01:241 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:24:40:2440 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:46:18:4618 [31merror[39m: [31mProblem validation failed: _id: Cast to ObjectId failed for value "temp_1755890136743" (type string) at path "_id" because of "BSONError"[39m
+2025-08-23 00:47:10:4710 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:47:53:4753 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m

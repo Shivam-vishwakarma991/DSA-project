@@ -21,13 +21,28 @@ import { ChartBarIcon, CalendarIcon, ClockIcon } from '@heroicons/react/24/outli
 
 interface ProgressChartProps {
   userProgress?: Progress[];
+  easySolved?: number;
+  mediumSolved?: number;
+  hardSolved?: number;
 }
 
-export default function ProgressChart({ userProgress = [] }: ProgressChartProps) {
+export default function ProgressChart({ 
+  userProgress = [], 
+  easySolved, 
+  mediumSolved, 
+  hardSolved 
+}: ProgressChartProps) {
   const [selectedTab, setSelectedTab] = useState(0);
 
   // Ensure userProgress is always an array
   const safeUserProgress = userProgress || [];
+
+  // Use provided difficulty stats or calculate from userProgress
+  const difficultyStats = {
+    easy: easySolved ?? Math.floor((safeUserProgress.filter(p => p.status === 'completed').length * 0.6) || 5),
+    medium: mediumSolved ?? Math.floor((safeUserProgress.filter(p => p.status === 'completed').length * 0.3) || 3),
+    hard: hardSolved ?? Math.floor((safeUserProgress.filter(p => p.status === 'completed').length * 0.1) || 1),
+  };
 
   // Process data for weekly progress
   const getWeeklyData = () => {
@@ -42,15 +57,10 @@ export default function ProgressChart({ userProgress = [] }: ProgressChartProps)
 
   // Process data for difficulty distribution
   const getDifficultyData = () => {
-    const completedCount = safeUserProgress.filter(p => p.status === 'completed').length;
-    const easy = Math.floor(completedCount * 0.6); // Mock distribution
-    const medium = Math.floor(completedCount * 0.3);
-    const hard = Math.floor(completedCount * 0.1);
-    
     return [
-      { name: 'Easy', value: easy || 5, color: '#10b981' },
-      { name: 'Medium', value: medium || 3, color: '#f59e0b' },
-      { name: 'Hard', value: hard || 1, color: '#ef4444' },
+      { name: 'Easy', value: difficultyStats.easy, color: '#10b981' },
+      { name: 'Medium', value: difficultyStats.medium, color: '#f59e0b' },
+      { name: 'Hard', value: difficultyStats.hard, color: '#ef4444' },
     ];
   };
 

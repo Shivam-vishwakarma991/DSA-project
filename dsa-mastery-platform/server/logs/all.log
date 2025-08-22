@@ -267,3 +267,48 @@
 2025-08-22 23:34:03:343 [32minfo[39m: [32m📝 Environment: development[39m
 2025-08-22 23:41:37:4137 [32minfo[39m: [32mNew user registered: shivamviswakarma@askgalore.com[39m
 2025-08-22 23:43:35:4335 [32minfo[39m: [32mUser logged in: john@example.com[39m
+2025-08-23 00:10:22:1022 [32minfo[39m: [32mUser logged in: shivamviswakarma@askgalore.com[39m
+2025-08-23 00:23:51:2351 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:24:01:241 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:24:40:2440 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:25:46:2546 [32minfo[39m: [32mUser logged in: admin@dsamastery.com[39m
+2025-08-23 00:44:31:4431 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:44:31:4431 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:44:31:4431 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:44:46:4446 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:44:46:4446 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:44:46:4446 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:45:03:453 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:45:03:453 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:45:03:453 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:46:18:4618 [31merror[39m: [31mProblem validation failed: _id: Cast to ObjectId failed for value "temp_1755890136743" (type string) at path "_id" because of "BSONError"[39m
+2025-08-23 00:46:47:4647 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:46:47:4647 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:46:47:4647 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:46:57:4657 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:46:57:4657 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:46:57:4657 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:47:10:4710 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:47:26:4726 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:47:26:4726 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:47:26:4726 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:47:53:4753 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 00:48:39:4839 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:48:39:4839 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:48:39:4839 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:48:49:4849 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:48:49:4849 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:48:49:4849 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:48:58:4858 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:48:58:4858 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:48:58:4858 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:49:11:4911 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:49:11:4911 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:49:11:4911 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:49:37:4937 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:49:37:4937 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:49:37:4937 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:49:44:4944 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-23 00:49:44:4944 [32minfo[39m: [32m🚀 Server running on port 5001[39m
+2025-08-23 00:49:44:4944 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-23 00:50:14:5014 [32minfo[39m: [32mUser logged in: shivamviswakarma@askgalore.com[39m

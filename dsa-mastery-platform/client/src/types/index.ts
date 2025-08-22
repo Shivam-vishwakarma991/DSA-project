@@ -40,6 +40,7 @@ export interface User {
     prerequisites?: string[];
     resources: Resource[];
     tags?: string[];
+    problems?: Problem[];
     isActive: boolean;
     createdAt: string;
     updatedAt: string;

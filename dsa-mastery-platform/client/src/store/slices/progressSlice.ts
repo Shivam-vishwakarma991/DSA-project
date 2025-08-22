@@ -110,7 +110,8 @@ const progressSlice = createSlice({
             state.userProgress = action.payload.recentActivity;
           }
           if ('userStats' in action.payload) {
-            state.statistics = action.payload.userStats;
+            // Store the user stats directly since it matches the User interface stats
+            state.statistics = action.payload.userStats as any;
           }
         }
         state.lastSync = new Date().toISOString();
@@ -121,15 +122,17 @@ const progressSlice = createSlice({
       })
       // Update Progress
       .addCase(updateProgress.fulfilled, (state, action) => {
-        // The data is already extracted in the thunk
-        if (action.payload && typeof action.payload === 'object' && 'problemId' in action.payload) {
-          const index = state.userProgress.findIndex(
-            p => p.problemId === action.payload.problemId
-          );
-          if (index !== -1) {
-            state.userProgress[index] = action.payload as Progress;
-          } else {
-            state.userProgress.push(action.payload as Progress);
+        // Handle the progress update - add to recent activity
+        if (action.payload && typeof action.payload === 'object') {
+          // Add to recent activity if it's a valid progress object
+          const progressData = action.payload as any;
+          if (progressData._id) {
+            const index = state.userProgress.findIndex(p => p._id === progressData._id);
+            if (index !== -1) {
+              state.userProgress[index] = progressData;
+            } else {
+              state.userProgress.unshift(progressData);
+            }
           }
         }
       })
@@ -137,14 +140,14 @@ const progressSlice = createSlice({
       .addCase(fetchStats.fulfilled, (state, action) => {
         // The data is already extracted in the thunk
         if (action.payload) {
-          state.statistics = action.payload as UserStats;
+          state.statistics = action.payload as any;
         }
       })
       // Fetch Streak
       .addCase(fetchStreak.fulfilled, (state, action) => {
         // The data is already extracted in the thunk
         if (action.payload) {
-          state.streak = action.payload as StreakInfo;
+          state.streak = action.payload as any;
         }
       })
       // Fetch Recent Activity

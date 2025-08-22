@@ -15,8 +15,10 @@ export const authAPI = {
   register: (data: RegisterData) => 
     api.post<AuthResponse>('/auth/register', data),
 
-  logout: () => 
-    api.post('/auth/logout'),
+  logout: () => {
+    const refreshToken = localStorage.getItem('refreshToken');
+    return api.post('/auth/logout', { refreshToken });
+  },
 
   refreshToken: () => 
     api.post<AuthResponse>('/auth/refresh'),

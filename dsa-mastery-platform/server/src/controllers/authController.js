@@ -145,18 +145,25 @@ exports.login = async (req, res, next) => {
 
 // @desc    Logout user
 // @route   POST /api/auth/logout
-// @access  Private
+// @access  Public
 exports.logout = async (req, res, next) => {
   try {
-    const user = await User.findById(req.user.id);
-    
-    // Remove refresh token
     const { refreshToken } = req.body;
-    if (refreshToken && user) {
-      user.refreshTokens = user.refreshTokens.filter(
-        tokenObj => tokenObj.token !== refreshToken
-      );
-      await user.save();
+    
+    // If user is authenticated, try to remove refresh token
+    if (req.user && req.user.id && refreshToken) {
+      try {
+        const user = await User.findById(req.user.id);
+        if (user) {
+          user.refreshTokens = user.refreshTokens.filter(
+            tokenObj => tokenObj.token !== refreshToken
+          );
+          await user.save();
+        }
+      } catch (userError) {
+        // Log but don't fail the logout if user lookup fails
+        logger.warn('Could not update user during logout:', userError.message);
+      }
     }
     
     res.status(200).json({
