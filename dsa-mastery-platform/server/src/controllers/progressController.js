@@ -1,238 +1,303 @@
 const Progress = require('../models/Progress');
-const Problem = require('../models/Problem');
 const User = require('../models/User');
+const Topic = require('../models/Topic');
+const Problem = require('../models/Problem');
+const logger = require('../utils/logger');
 const asyncHandler = require('../utils/asyncHandler');
-const { MESSAGES, DEFAULT_PAGE_SIZE } = require('../config/constants');
-const { calculatePercentage, formatDuration } = require('../utils/helpers');
 
-// @desc    Get user progress
-// @route   GET /api/progress
+// @desc    Get user's overall progress
+// @route   GET /api/progress/user
 // @access  Private
 exports.getUserProgress = asyncHandler(async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || DEFAULT_PAGE_SIZE;
-  const { status, topicId } = req.query;
+  const userId = req.user.id;
 
-  const query = { userId: req.user._id };
+  // Get user's progress statistics
+  const progressStats = await Progress.aggregate([
+    { $match: { userId: req.user._id } },
+    {
+      $group: {
+        _id: null,
+        totalProblems: { $sum: 1 },
+        completedProblems: { $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] } },
+        attemptedProblems: { $sum: { $cond: [{ $eq: ['$status', 'attempted'] }, 1, 0] } },
+        totalTimeSpent: { $sum: '$timeSpent' },
+        avgConfidence: { $avg: '$confidence' }
+      }
+    }
+  ]);
 
-  if (status) query.status = status;
-  if (topicId) query.topicId = topicId;
-
-  const progress = await Progress.find(query)
-    .populate('problemId', 'title difficulty tags')
-    .populate('topicId', 'title slug')
-    .sort('-updatedAt')
-    .limit(limit)
-    .skip((page - 1) * limit);
-
-  const total = await Progress.countDocuments(query);
-
-  res.status(200).json({
-    success: true,
-    data: progress,
-    pagination: {
-      page,
-      limit,
-      total,
-      pages: Math.ceil(total / limit),
+  // Get topic progress
+  const topicProgress = await Progress.aggregate([
+    { $match: { userId: req.user._id } },
+    {
+      $lookup: {
+        from: 'topics',
+        localField: 'topicId',
+        foreignField: '_id',
+        as: 'topic'
+      }
     },
-  });
-});
+    { $unwind: '$topic' },
+    {
+      $group: {
+        _id: '$topicId',
+        topicName: { $first: '$topic.title' },
+        topicSlug: { $first: '$topic.slug' },
+        total: { $sum: 1 },
+        completed: { $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] } },
+        attempted: { $sum: { $cond: [{ $eq: ['$status', 'attempted'] }, 1, 0] } }
+      }
+    },
+    {
+      $addFields: {
+        percentage: { $multiply: [{ $divide: ['$completed', '$total'] }, 100] }
+      }
+    }
+  ]);
 
-// @desc    Update progress
-// @route   POST /api/progress/update
-// @access  Private
-exports.updateProgress = asyncHandler(async (req, res) => {
-  const { problemId, status, timeSpent, confidence, notes } = req.body;
+  // Get recent activity
+  const recentActivity = await Progress.find({ userId: req.user._id })
+    .populate('problemId', 'title')
+    .populate('topicId', 'title')
+    .sort({ updatedAt: -1 })
+    .limit(10);
 
-  let progress = await Progress.findOne({
-    userId: req.user._id,
-    problemId,
-  });
-
-  if (progress) {
-    // Update existing progress
-    progress.status = status;
-    progress.timeSpent = timeSpent || progress.timeSpent;
-    progress.confidence = confidence || progress.confidence;
-    progress.notes = notes || progress.notes;
-    progress.attempts += 1;
-    progress.lastAttempted = new Date();
-  } else {
-    // Create new progress
-    progress = await Progress.create({
-      userId: req.user._id,
-      problemId,
-      status,
-      timeSpent,
-      confidence,
-      notes,
-      attempts: 1,
-      firstAttempted: new Date(),
-      lastAttempted: new Date(),
-    });
-  }
-
-  await progress.save();
-
-  // Update user stats
-  await updateUserStats(req.user._id, status);
-
-  res.status(200).json({
-    success: true,
-    message: 'Progress updated successfully',
-    data: progress,
-  });
-});
-
-// @desc    Get user stats
-// @route   GET /api/progress/stats
-// @access  Private
-exports.getStats = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-  
-  const totalProblems = await Problem.countDocuments({ isActive: true });
-  const completedProblems = await Progress.countDocuments({
-    userId: req.user._id,
-    status: 'completed',
-  });
-
-  const stats = {
-    totalSolved: user.stats.totalSolved,
-    easySolved: user.stats.easySolved,
-    mediumSolved: user.stats.mediumSolved,
-    hardSolved: user.stats.hardSolved,
-    streak: user.stats.streak,
-    longestStreak: user.stats.longestStreak,
-    totalTimeSpent: formatDuration(user.stats.totalTimeSpent),
-    completionRate: calculatePercentage(completedProblems, totalProblems),
-    rank: await calculateUserRank(req.user._id),
+  const stats = progressStats[0] || {
+    totalProblems: 0,
+    completedProblems: 0,
+    attemptedProblems: 0,
+    totalTimeSpent: 0,
+    avgConfidence: 0
   };
 
   res.status(200).json({
     success: true,
-    data: stats,
-  });
-});
-
-// @desc    Get user streak
-// @route   GET /api/progress/streak
-// @access  Private
-exports.getStreak = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-
-  res.status(200).json({
-    success: true,
     data: {
-      currentStreak: user.stats.streak,
-      longestStreak: user.stats.longestStreak,
-      lastActiveDate: user.stats.lastActiveDate,
-    },
+      completionStats: {
+        total: stats.totalProblems,
+        completed: stats.completedProblems,
+        attempted: stats.attemptedProblems,
+        percentage: stats.totalProblems > 0 ? Math.round((stats.completedProblems / stats.totalProblems) * 100) : 0
+      },
+      topicProgress,
+      recentActivity: recentActivity.map(activity => ({
+        _id: activity._id,
+        problemTitle: activity.problemId?.title,
+        topic: activity.topicId?.title,
+        status: activity.status,
+        date: activity.updatedAt,
+        timeSpent: activity.timeSpent
+      })),
+      userStats: req.user.stats
+    }
   });
 });
 
-// @desc    Get leaderboard
-// @route   GET /api/progress/leaderboard
-// @access  Public
-exports.getLeaderboard = asyncHandler(async (req, res) => {
-  const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 20;
+// @desc    Get progress for a specific topic
+// @route   GET /api/progress/topic/:topicId
+// @access  Private
+exports.getTopicProgress = asyncHandler(async (req, res) => {
+  const { topicId } = req.params;
+  const userId = req.user.id;
 
-  const users = await User.find({ isActive: true })
-    .select('username fullName avatar stats')
-    .sort({ 'stats.totalSolved': -1, 'stats.longestStreak': -1 })
-    .limit(limit)
-    .skip((page - 1) * limit);
-
-  const total = await User.countDocuments({ isActive: true });
+  const progress = await Progress.find({ userId, topicId })
+    .populate('problemId', 'title difficulty')
+    .sort({ 'problemId.order': 1 });
 
   res.status(200).json({
     success: true,
-    data: users,
-    pagination: {
-      page,
-      limit,
-      total,
-      pages: Math.ceil(total / limit),
-    },
+    data: progress
   });
 });
 
-// @desc    Reset progress for a problem
-// @route   DELETE /api/progress/reset/:problemId
+// @desc    Update problem progress
+// @route   PUT /api/progress/problem/:problemId
 // @access  Private
-exports.resetProgress = asyncHandler(async (req, res) => {
-  const progress = await Progress.findOneAndDelete({
-    userId: req.user._id,
-    problemId: req.params.problemId,
-  });
+exports.updateProblemProgress = asyncHandler(async (req, res) => {
+  const { problemId } = req.params;
+  const userId = req.user.id;
+  const updateData = req.body;
 
+  // Find or create progress record
+  let progress = await Progress.findOne({ userId, problemId });
+  
   if (!progress) {
-    return res.status(404).json({
-      success: false,
-      message: 'Progress not found',
+    // Get problem and topic info
+    const problem = await Problem.findById(problemId);
+    if (!problem) {
+      return res.status(404).json({
+        success: false,
+        message: 'Problem not found'
+      });
+    }
+
+    progress = new Progress({
+      userId,
+      problemId,
+      topicId: problem.topicId,
+      status: updateData.status,
+      notes: updateData.notes,
+      code: updateData.code,
+      language: updateData.language,
+      timeSpent: updateData.timeSpent,
+      confidence: updateData.confidence,
+      isBookmarked: updateData.isBookmarked || false
     });
+  } else {
+    // Update existing progress
+    Object.assign(progress, updateData);
+  }
+
+  await progress.save();
+
+  // Update user stats if problem is completed
+  if (updateData.status === 'completed' && progress.status !== 'completed') {
+    const user = await User.findById(userId);
+    const problem = await Problem.findById(problemId);
+    
+    if (user && problem) {
+      user.stats.totalSolved += 1;
+      user.stats.totalTimeSpent += updateData.timeSpent || 0;
+      
+      // Update difficulty-specific stats
+      switch (problem.difficulty.toLowerCase()) {
+        case 'easy':
+          user.stats.easySolved += 1;
+          break;
+        case 'medium':
+          user.stats.mediumSolved += 1;
+          break;
+        case 'hard':
+          user.stats.hardSolved += 1;
+          break;
+      }
+      
+      await user.save();
+    }
   }
 
   res.status(200).json({
     success: true,
-    message: 'Progress reset successfully',
+    data: progress
   });
 });
 
-// @desc    Get activity heatmap
-// @route   GET /api/progress/activity
+// @desc    Get user's streak information
+// @route   GET /api/progress/streak
 // @access  Private
-exports.getActivityHeatmap = asyncHandler(async (req, res) => {
-  const days = parseInt(req.query.days) || 365;
-  const endDate = new Date();
-  const startDate = new Date(endDate.getTime() - (days * 24 * 60 * 60 * 1000));
+exports.getStreakInfo = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  
+  // Calculate streak info (this is a simplified version)
+  const streakInfo = {
+    current: user.stats.streak,
+    longest: user.stats.longestStreak,
+    lastActiveDate: user.stats.lastActiveDate,
+    streakDates: [], // Would need to calculate from activity history
+    gapDays: 0
+  };
 
-  const activity = await Progress.aggregate([
+  res.status(200).json({
+    success: true,
+    data: streakInfo
+  });
+});
+
+// @desc    Get recent activity
+// @route   GET /api/progress/recent
+// @access  Private
+exports.getRecentActivity = asyncHandler(async (req, res) => {
+  const { limit = 10 } = req.query;
+  const userId = req.user.id;
+
+  const recentActivity = await Progress.find({ userId })
+    .populate('problemId', 'title')
+    .populate('topicId', 'title')
+    .sort({ updatedAt: -1 })
+    .limit(parseInt(limit));
+
+  res.status(200).json({
+    success: true,
+    data: recentActivity.map(activity => ({
+      _id: activity._id,
+      problemTitle: activity.problemId?.title,
+      topic: activity.topicId?.title,
+      status: activity.status,
+      date: activity.updatedAt,
+      timeSpent: activity.timeSpent
+    }))
+  });
+});
+
+// @desc    Get topic completion stats
+// @route   GET /api/progress/topics
+// @access  Private
+exports.getTopicStats = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+
+  const topicStats = await Progress.aggregate([
+    { $match: { userId: req.user._id } },
     {
-      $match: {
-        userId: req.user._id,
-        lastAttempted: { $gte: startDate, $lte: endDate },
-      },
+      $lookup: {
+        from: 'topics',
+        localField: 'topicId',
+        foreignField: '_id',
+        as: 'topic'
+      }
     },
+    { $unwind: '$topic' },
     {
       $group: {
-        _id: {
-          $dateToString: { format: '%Y-%m-%d', date: '$lastAttempted' },
-        },
-        count: { $sum: 1 },
-      },
+        _id: '$topicId',
+        topicName: { $first: '$topic.title' },
+        topicSlug: { $first: '$topic.slug' },
+        total: { $sum: 1 },
+        completed: { $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] } },
+        attempted: { $sum: { $cond: [{ $eq: ['$status', 'attempted'] }, 1, 0] } }
+      }
     },
     {
-      $sort: { _id: 1 },
-    },
+      $addFields: {
+        percentage: { $multiply: [{ $divide: ['$completed', '$total'] }, 100] }
+      }
+    }
   ]);
 
   res.status(200).json({
     success: true,
-    data: activity,
+    data: topicStats
   });
 });
 
-// Helper function to update user stats
-const updateUserStats = async (userId, status) => {
-  const user = await User.findById(userId);
-  
-  if (status === 'completed') {
-    user.stats.totalSolved += 1;
-    // Update difficulty-specific stats based on problem difficulty
-    // This would need to be implemented based on the problem difficulty
+// @desc    Get achievements
+// @route   GET /api/progress/achievements
+// @access  Private
+exports.getAchievements = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id);
+  const achievements = [];
+
+  // Check for various achievements
+  if (user.stats.totalSolved >= 1) {
+    achievements.push({ name: 'First Problem', description: 'Solved your first problem', unlocked: true });
+  }
+  if (user.stats.totalSolved >= 10) {
+    achievements.push({ name: 'Getting Started', description: 'Solved 10 problems', unlocked: true });
+  }
+  if (user.stats.totalSolved >= 50) {
+    achievements.push({ name: 'Problem Solver', description: 'Solved 50 problems', unlocked: true });
+  }
+  if (user.stats.totalSolved >= 100) {
+    achievements.push({ name: 'Century Club', description: 'Solved 100 problems', unlocked: true });
+  }
+  if (user.stats.streak >= 7) {
+    achievements.push({ name: 'Week Warrior', description: 'Maintained a 7-day streak', unlocked: true });
+  }
+  if (user.stats.streak >= 30) {
+    achievements.push({ name: 'Monthly Master', description: 'Maintained a 30-day streak', unlocked: true });
   }
 
-  user.stats.lastActiveDate = new Date();
-  await user.save();
-};
-
-// Helper function to calculate user rank
-const calculateUserRank = async (userId) => {
-  const user = await User.findById(userId);
-  const rank = await User.countDocuments({
-    'stats.totalSolved': { $gt: user.stats.totalSolved },
+  res.status(200).json({
+    success: true,
+    data: achievements
   });
-  return rank + 1;
-};
+});

@@ -5,22 +5,99 @@ import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
 import { fetchTopics } from '@/store/slices/topicsSlice';
-import { fetchUserProgress } from '@/store/slices/progressSlice';
 import StatsOverview from '@/components/dashboard/StatsOverview';
 import TopicGrid from '@/components/dashboard/TopicGrid';
 import DashboardHeader from '../../../components/dashboard/DashboardHeader';
 import ProgressChart from '../../../components/dashboard/ProgressChart';
 import RecentActivity from '../../../components/dashboard/RecentActivity';
-// import StreakTracker from '../../../components/dashboard/StreakTracker';
-// import GuidedTour from '../../../components/features/GuidedTour';
 import { Loader } from '../../../components/common/Loader';
+import { Progress } from '@/types';
+
+// Mock data for recent activity
+const mockRecentActivity: Progress[] = [
+  {
+    _id: '1',
+    userId: 'user1',
+    problemId: 'problem1',
+    topicId: 'topic1',
+    status: 'completed',
+    notes: 'Solved using HashMap approach',
+    code: '// Solution code here',
+    language: 'JavaScript',
+    timeSpent: 25,
+    attempts: 1,
+    lastAttemptDate: '2024-01-15T10:30:00Z',
+    completedDate: '2024-01-15T10:30:00Z',
+    confidence: 8,
+    isBookmarked: false,
+    createdAt: '2024-01-15T10:30:00Z',
+    updatedAt: '2024-01-15T10:30:00Z'
+  },
+  {
+    _id: '2',
+    userId: 'user1',
+    problemId: 'problem2',
+    topicId: 'topic2',
+    status: 'completed',
+    notes: 'Stack-based solution',
+    code: '// Solution code here',
+    language: 'JavaScript',
+    timeSpent: 30,
+    attempts: 2,
+    lastAttemptDate: '2024-01-14T15:20:00Z',
+    completedDate: '2024-01-14T15:20:00Z',
+    confidence: 7,
+    isBookmarked: false,
+    createdAt: '2024-01-14T15:20:00Z',
+    updatedAt: '2024-01-14T15:20:00Z'
+  },
+  {
+    _id: '3',
+    userId: 'user1',
+    problemId: 'problem3',
+    topicId: 'topic3',
+    status: 'attempted',
+    notes: 'Need to review inorder traversal',
+    code: '// Partial solution',
+    language: 'JavaScript',
+    timeSpent: 45,
+    attempts: 3,
+    lastAttemptDate: '2024-01-13T09:15:00Z',
+    confidence: 4,
+    isBookmarked: true,
+    createdAt: '2024-01-13T09:15:00Z',
+    updatedAt: '2024-01-13T09:15:00Z'
+  }
+];
+
+// Mock user progress for the chart
+const mockUserProgress: Progress[] = [
+  ...mockRecentActivity,
+  // Add more mock data to make the chart more interesting
+  {
+    _id: '4',
+    userId: 'user1',
+    problemId: 'problem4',
+    topicId: 'topic1',
+    status: 'completed',
+    notes: 'Two pointer approach',
+    code: '// Solution code here',
+    language: 'JavaScript',
+    timeSpent: 20,
+    attempts: 1,
+    lastAttemptDate: '2024-01-12T14:00:00Z',
+    completedDate: '2024-01-12T14:00:00Z',
+    confidence: 9,
+    isBookmarked: false,
+    createdAt: '2024-01-12T14:00:00Z',
+    updatedAt: '2024-01-12T14:00:00Z'
+  }
+];
 
 export default function DashboardPage() {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const { topics, loading: topicsLoading } = useSelector((state: RootState) => state.topics);
-  const { userProgress, statistics, streak } = useSelector((state: RootState) => state.progress);
-  const [showTour, setShowTour] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -32,15 +109,7 @@ export default function DashboardPage() {
     
     // Fetch initial data
     dispatch(fetchTopics());
-    if (user) {
-      dispatch(fetchUserProgress(user._id));
-      
-      // Show tour for new users
-      if (user.stats.totalSolved === 0) {
-        setShowTour(true);
-      }
-    }
-  }, [dispatch, user, mounted]);
+  }, [dispatch, mounted]);
 
   if (!mounted || topicsLoading) {
     return <Loader fullScreen />;
@@ -48,9 +117,6 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      {/* Guided Tour for First-time Users */}
-      {/* {showTour && <GuidedTour onComplete={() => setShowTour(false)} />} */}
-      
       {/* Dashboard Header */}
       <DashboardHeader user={user} />
       
@@ -88,7 +154,7 @@ export default function DashboardPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
             >
-              <ProgressChart userProgress={userProgress} />
+              <ProgressChart userProgress={mockUserProgress} />
             </motion.div>
 
             {/* Topic Grid */}
@@ -97,28 +163,19 @@ export default function DashboardPage() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <TopicGrid topics={topics} userProgress={userProgress} loading={topicsLoading} />
+              <TopicGrid topics={topics} userProgress={mockUserProgress} loading={topicsLoading} />
             </motion.div>
           </div>
 
           {/* Right Column - Streak & Recent Activity */}
           <div className="space-y-8">
-            {/* Streak Tracker */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              {/* <StreakTracker streak={streak} /> */}
-            </motion.div>
-
             {/* Recent Activity */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <RecentActivity activities={userProgress?.slice(0, 5)} />
+              <RecentActivity activities={mockRecentActivity} />
             </motion.div>
           </div>
         </div>

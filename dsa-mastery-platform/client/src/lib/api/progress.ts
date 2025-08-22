@@ -1,38 +1,40 @@
-import api from './index';
+import api from './instance';
 import { Progress, UserStats, StreakInfo } from '../../types';
 
 export const progressAPI = {
-  getUserProgress: (userId: string, params?: { 
-    topicId?: string; 
-    status?: string; 
-    sort?: string 
-  }) => 
-    api.get<Progress[]>('/progress', { params }),
+  // Get user's overall progress
+  getUserProgress: () => 
+    api.get<{ success: boolean; data: UserStats }>('/progress/user'),
 
-  updateProgress: (data: {
-    problemId: string;
-    topicId?: string;
-    status: string;
-    timeSpent?: number;
+  // Get progress for a specific topic
+  getTopicProgress: (topicId: string) => 
+    api.get<{ success: boolean; data: Progress[] }>(`/progress/topic/${topicId}`),
+
+  // Update problem progress
+  updateProblemProgress: (problemId: string, data: {
+    status: 'pending' | 'attempted' | 'completed' | 'revisit';
     notes?: string;
-    confidence?: number;
     code?: string;
     language?: string;
+    timeSpent: number;
+    confidence?: number;
+    isBookmarked?: boolean;
   }) => 
-    api.post<Progress>('/progress/update', data),
+    api.put<{ success: boolean; data: Progress }>(`/progress/problem/${problemId}`, data),
 
-  getStats: () => 
-    api.get<UserStats>('/progress/stats'),
+  // Get user's streak information
+  getStreakInfo: () => 
+    api.get<{ success: boolean; data: StreakInfo }>('/progress/streak'),
 
-  getStreak: () => 
-    api.get<StreakInfo>('/progress/streak'),
+  // Get recent activity
+  getRecentActivity: (limit?: number) => 
+    api.get<{ success: boolean; data: Progress[] }>(`/progress/recent?limit=${limit || 10}`),
 
-  getActivityHeatmap: (year?: number) => 
-    api.get('/progress/activity', { params: { year } }),
+  // Get topic completion stats
+  getTopicStats: () => 
+    api.get<{ success: boolean; data: any }>('/progress/topics'),
 
-  getLeaderboard: (period: 'daily' | 'weekly' | 'monthly' | 'all' = 'all', limit = 10) => 
-    api.get('/progress/leaderboard', { params: { period, limit } }),
-
-  resetProgress: (problemId: string) => 
-    api.delete(`/progress/reset/${problemId}`),
+  // Get achievements
+  getAchievements: () => 
+    api.get<{ success: boolean; data: any[] }>('/progress/achievements'),
 };

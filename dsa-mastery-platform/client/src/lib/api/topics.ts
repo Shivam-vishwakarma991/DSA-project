@@ -1,4 +1,4 @@
-import api from './index';
+import api from './instance';
 import { Topic, Problem } from '../../types';
 
 // API Response interfaces

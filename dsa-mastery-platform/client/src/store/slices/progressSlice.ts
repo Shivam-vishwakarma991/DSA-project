@@ -24,8 +24,8 @@ const initialState: ProgressState = {
 
 export const fetchUserProgress = createAsyncThunk(
   'progress/fetchUserProgress',
-  async (userId: string) => {
-    const response = await progressAPI.getUserProgress(userId);
+  async () => {
+    const response = await progressAPI.getUserProgress();
     return response.data;
   }
 );
@@ -34,12 +34,15 @@ export const updateProgress = createAsyncThunk(
   'progress/updateProgress',
   async (data: {
     problemId: string;
-    topicId: string;
-    status: string;
-    timeSpent?: number;
+    status: 'pending' | 'attempted' | 'completed' | 'revisit';
     notes?: string;
+    code?: string;
+    language?: string;
+    timeSpent: number;
+    confidence?: number;
+    isBookmarked?: boolean;
   }) => {
-    const response = await progressAPI.updateProgress(data);
+    const response = await progressAPI.updateProblemProgress(data.problemId, data);
     return response.data;
   }
 );
@@ -47,7 +50,7 @@ export const updateProgress = createAsyncThunk(
 export const fetchStats = createAsyncThunk(
   'progress/fetchStats',
   async () => {
-    const response = await progressAPI.getStats();
+    const response = await progressAPI.getTopicStats();
     return response.data;
   }
 );
@@ -55,15 +58,15 @@ export const fetchStats = createAsyncThunk(
 export const fetchStreak = createAsyncThunk(
   'progress/fetchStreak',
   async () => {
-    const response = await progressAPI.getStreak();
+    const response = await progressAPI.getStreakInfo();
     return response.data;
   }
 );
 
-export const fetchLeaderboard = createAsyncThunk(
-  'progress/fetchLeaderboard',
-  async (period: 'daily' | 'weekly' | 'monthly' | 'all' = 'all') => {
-    const response = await progressAPI.getLeaderboard(period);
+export const fetchRecentActivity = createAsyncThunk(
+  'progress/fetchRecentActivity',
+  async (limit?: number) => {
+    const response = await progressAPI.getRecentActivity(limit);
     return response.data;
   }
 );
@@ -101,7 +104,15 @@ const progressSlice = createSlice({
       })
       .addCase(fetchUserProgress.fulfilled, (state, action) => {
         state.loading = false;
-        state.userProgress = action.payload;
+        // Handle the API response structure - the data is already extracted in the thunk
+        if (action.payload && typeof action.payload === 'object') {
+          if ('recentActivity' in action.payload && Array.isArray(action.payload.recentActivity)) {
+            state.userProgress = action.payload.recentActivity;
+          }
+          if ('userStats' in action.payload) {
+            state.statistics = action.payload.userStats;
+          }
+        }
         state.lastSync = new Date().toISOString();
       })
       .addCase(fetchUserProgress.rejected, (state, action) => {
@@ -110,26 +121,38 @@ const progressSlice = createSlice({
       })
       // Update Progress
       .addCase(updateProgress.fulfilled, (state, action) => {
-        const index = state.userProgress.findIndex(
-          p => p.problemId === action.payload.problemId
-        );
-        if (index !== -1) {
-          state.userProgress[index] = action.payload;
-        } else {
-          state.userProgress.push(action.payload);
+        // The data is already extracted in the thunk
+        if (action.payload && typeof action.payload === 'object' && 'problemId' in action.payload) {
+          const index = state.userProgress.findIndex(
+            p => p.problemId === action.payload.problemId
+          );
+          if (index !== -1) {
+            state.userProgress[index] = action.payload as Progress;
+          } else {
+            state.userProgress.push(action.payload as Progress);
+          }
         }
       })
       // Fetch Stats
       .addCase(fetchStats.fulfilled, (state, action) => {
-        state.statistics = action.payload;
+        // The data is already extracted in the thunk
+        if (action.payload) {
+          state.statistics = action.payload as UserStats;
+        }
       })
       // Fetch Streak
       .addCase(fetchStreak.fulfilled, (state, action) => {
-        state.streak = action.payload;
+        // The data is already extracted in the thunk
+        if (action.payload) {
+          state.streak = action.payload as StreakInfo;
+        }
       })
-      // Fetch Leaderboard
-      .addCase(fetchLeaderboard.fulfilled, (state, action) => {
-        state.leaderboard = action.payload;
+      // Fetch Recent Activity
+      .addCase(fetchRecentActivity.fulfilled, (state, action) => {
+        // The data is already extracted in the thunk
+        if (Array.isArray(action.payload)) {
+          state.userProgress = action.payload;
+        }
       });
   },
 });

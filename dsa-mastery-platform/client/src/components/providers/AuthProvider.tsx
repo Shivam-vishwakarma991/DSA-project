@@ -5,8 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { refreshToken, setUser, getCurrentUser, setLoading } from '@/store/slices/authSlice';
 import { Loader } from '@/components/common/Loader';
-import Cookies from 'js-cookie';
-import api from '@/lib/api';
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
@@ -22,18 +20,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const initAuth = async () => {
       // Check for existing token
-      const token = Cookies.get('token');
-      const refreshTokenCookie = Cookies.get('refreshToken');
+      const token = localStorage.getItem('token');
+      const refreshTokenValue = localStorage.getItem('refreshToken');
       
-      if (refreshTokenCookie && !isAuthenticated) {
+      if (refreshTokenValue && !isAuthenticated) {
         try {
           // Try to refresh the token
           await dispatch(refreshToken()).unwrap();
         } catch (error) {
           console.error('Failed to refresh token:', error);
           // Clear invalid tokens
-          Cookies.remove('token');
-          Cookies.remove('refreshToken');
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
         }
       } else if (token && !isAuthenticated) {
         // Validate token by fetching user profile
@@ -42,8 +40,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         } catch (error) {
           console.error('Failed to validate token:', error);
           // Token is invalid
-          Cookies.remove('token');
-          Cookies.remove('refreshToken');
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
         }
       }
       

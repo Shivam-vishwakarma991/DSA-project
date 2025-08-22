@@ -20,6 +20,9 @@ export const login = createAsyncThunk(
   'auth/login',
   async (credentials: LoginCredentials) => {
     const response = await authAPI.login(credentials);
+    // Store tokens in localStorage
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('refreshToken', response.data.refreshToken);
     return response.data;
   }
 );
@@ -28,16 +31,28 @@ export const register = createAsyncThunk(
   'auth/register',
   async (data: RegisterData) => {
     const response = await authAPI.register(data);
+    // Store tokens in localStorage
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('refreshToken', response.data.refreshToken);
     return response.data;
   }
 );
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await authAPI.logout();
+  const refreshToken = localStorage.getItem('refreshToken');
+  if (refreshToken) {
+    await authAPI.logout();
+  }
+  // Clear tokens from localStorage
+  localStorage.removeItem('token');
+  localStorage.removeItem('refreshToken');
 });
 
 export const refreshToken = createAsyncThunk('auth/refresh', async () => {
   const response = await authAPI.refreshToken();
+  // Update tokens in localStorage
+  localStorage.setItem('token', response.data.token);
+  localStorage.setItem('refreshToken', response.data.refreshToken);
   return response.data;
 });
 

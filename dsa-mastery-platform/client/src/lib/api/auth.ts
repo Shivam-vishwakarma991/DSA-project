@@ -1,18 +1,25 @@
-import api from './index';
+import api from './instance';
 import { LoginCredentials, RegisterData, User } from '../../types';
+
+interface AuthResponse {
+  success: boolean;
+  token: string;
+  refreshToken: string;
+  user: User;
+}
 
 export const authAPI = {
   login: (credentials: LoginCredentials) => 
-    api.post<{ success: boolean; token: string; user: User }>('/auth/login', credentials),
+    api.post<AuthResponse>('/auth/login', credentials),
 
   register: (data: RegisterData) => 
-    api.post<{ success: boolean; token: string; user: User }>('/auth/register', data),
+    api.post<AuthResponse>('/auth/register', data),
 
   logout: () => 
     api.post('/auth/logout'),
 
   refreshToken: () => 
-    api.post<{ success: boolean; token: string; user: User }>('/auth/refresh'),
+    api.post<AuthResponse>('/auth/refresh'),
 
   forgotPassword: (email: string) => 
     api.post('/auth/forgot-password', { email }),

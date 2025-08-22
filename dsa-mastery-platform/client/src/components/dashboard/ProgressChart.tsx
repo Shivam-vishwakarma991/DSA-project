@@ -20,11 +20,14 @@ import { Tab } from '@headlessui/react';
 import { ChartBarIcon, CalendarIcon, ClockIcon } from '@heroicons/react/24/outline';
 
 interface ProgressChartProps {
-  userProgress: Progress[];
+  userProgress?: Progress[];
 }
 
-export default function ProgressChart({ userProgress }: ProgressChartProps) {
+export default function ProgressChart({ userProgress = [] }: ProgressChartProps) {
   const [selectedTab, setSelectedTab] = useState(0);
+
+  // Ensure userProgress is always an array
+  const safeUserProgress = userProgress || [];
 
   // Process data for weekly progress
   const getWeeklyData = () => {
@@ -39,9 +42,10 @@ export default function ProgressChart({ userProgress }: ProgressChartProps) {
 
   // Process data for difficulty distribution
   const getDifficultyData = () => {
-    const easy = userProgress.filter(p => p.status === 'completed').length; // Mock - need problem difficulty
-    const medium = Math.floor(easy * 0.7);
-    const hard = Math.floor(easy * 0.3);
+    const completedCount = safeUserProgress.filter(p => p.status === 'completed').length;
+    const easy = Math.floor(completedCount * 0.6); // Mock distribution
+    const medium = Math.floor(completedCount * 0.3);
+    const hard = Math.floor(completedCount * 0.1);
     
     return [
       { name: 'Easy', value: easy || 5, color: '#10b981' },
@@ -63,6 +67,13 @@ export default function ProgressChart({ userProgress }: ProgressChartProps) {
   const weeklyData = getWeeklyData();
   const difficultyData = getDifficultyData();
   const monthlyData = getMonthlyTrend();
+
+  // Calculate summary stats
+  const completedThisWeek = safeUserProgress.filter(p => p.status === 'completed').length;
+  const totalTimeSpent = safeUserProgress.reduce((acc, p) => acc + (p.timeSpent || 0), 0);
+  const successRate = safeUserProgress.length > 0 
+    ? Math.round((completedThisWeek / safeUserProgress.length) * 100)
+    : 85; // Default success rate
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
@@ -198,21 +209,21 @@ export default function ProgressChart({ userProgress }: ProgressChartProps) {
         <div className="text-center">
           <CalendarIcon className="h-5 w-5 text-gray-400 mx-auto mb-1" />
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
-            {userProgress.filter(p => p.status === 'completed').length}
+            {completedThisWeek}
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">This Week</p>
         </div>
         <div className="text-center">
           <ClockIcon className="h-5 w-5 text-gray-400 mx-auto mb-1" />
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
-            {Math.round(userProgress.reduce((acc, p) => acc + p.timeSpent, 0) / 60)}h
+            {Math.round(totalTimeSpent / 60)}h
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">Time Spent</p>
         </div>
         <div className="text-center">
           <ChartBarIcon className="h-5 w-5 text-gray-400 mx-auto mb-1" />
           <p className="text-2xl font-bold text-gray-900 dark:text-white">
-            85%
+            {successRate}%
           </p>
           <p className="text-xs text-gray-500 dark:text-gray-400">Success Rate</p>
         </div>

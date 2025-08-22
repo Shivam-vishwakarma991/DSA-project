@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils/index';
 
 const buttonVariants = cva(
   'inline-flex items-center justify-center rounded-lg font-medium transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed',
@@ -78,48 +78,3 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = 'Button';
 
-// ============================================
-// client/src/components/common/Card/index.tsx
-// ============================================
-import { HTMLAttributes } from 'react';
-import { cn } from '@/lib/utils';
-
-interface CardProps extends HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'bordered' | 'elevated';
-  padding?: 'none' | 'sm' | 'md' | 'lg';
-}
-
-export function Card({ 
-  className, 
-  variant = 'default', 
-  padding = 'md',
-  children, 
-  ...props 
-}: CardProps) {
-  const variantClasses = {
-    default: 'bg-white dark:bg-gray-800',
-    bordered: 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700',
-    elevated: 'bg-white dark:bg-gray-800 shadow-lg',
-  };
-
-  const paddingClasses = {
-    none: '',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
-  };
-
-  return (
-    <div
-      className={cn(
-        'rounded-xl transition-all',
-        variantClasses[variant],
-        paddingClasses[padding],
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
-  );
-}

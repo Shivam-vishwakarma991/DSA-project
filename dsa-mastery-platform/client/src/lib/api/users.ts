@@ -1,4 +1,4 @@
-import api from './index';
+import api from './instance';
 import { User } from '../../types';
 
 export const usersAPI = {

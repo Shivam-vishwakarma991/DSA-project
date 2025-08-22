@@ -10,36 +10,23 @@ const sendTokenResponse = (user, statusCode, res) => {
   const token = user.generateAuthToken();
   const refreshToken = user.generateRefreshToken();
   
-  const cookieOptions = {
-    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-  };
-  
   user.save({ validateBeforeSave: false });
   
-  res
-    .status(statusCode)
-    .cookie('token', token, cookieOptions)
-    .cookie('refreshToken', refreshToken, {
-      ...cookieOptions,
-      expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
-    })
-    .json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        fullName: user.fullName,
-        role: user.role,
-        avatar: user.avatar,
-        preferences: user.preferences,
-        stats: user.stats,
-      },
-    });
+  res.status(statusCode).json({
+    success: true,
+    token,
+    refreshToken,
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      fullName: user.fullName,
+      role: user.role,
+      avatar: user.avatar,
+      preferences: user.preferences,
+      stats: user.stats,
+    },
+  });
 };
 
 // @desc    Register user
@@ -164,7 +151,7 @@ exports.logout = async (req, res, next) => {
     const user = await User.findById(req.user.id);
     
     // Remove refresh token
-    const refreshToken = req.cookies.refreshToken;
+    const { refreshToken } = req.body;
     if (refreshToken && user) {
       user.refreshTokens = user.refreshTokens.filter(
         tokenObj => tokenObj.token !== refreshToken
@@ -172,20 +159,10 @@ exports.logout = async (req, res, next) => {
       await user.save();
     }
     
-    res
-      .cookie('token', 'none', {
-        expires: new Date(Date.now() + 10 * 1000),
-        httpOnly: true,
-      })
-      .cookie('refreshToken', 'none', {
-        expires: new Date(Date.now() + 10 * 1000),
-        httpOnly: true,
-      })
-      .status(200)
-      .json({
-        success: true,
-        message: 'Logged out successfully',
-      });
+    res.status(200).json({
+      success: true,
+      message: 'Logged out successfully',
+    });
       
   } catch (error) {
     logger.error('Logout error:', error);
@@ -201,7 +178,7 @@ exports.logout = async (req, res, next) => {
 // @access  Public
 exports.refreshToken = async (req, res, next) => {
   try {
-    const { refreshToken } = req.cookies;
+    const { refreshToken } = req.body;
     
     if (!refreshToken) {
       return res.status(401).json({

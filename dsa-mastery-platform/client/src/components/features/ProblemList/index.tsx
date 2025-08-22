@@ -32,8 +32,8 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
     try {
       await dispatch(updateProgress({
         problemId,
-        topicId,
-        status,
+        status: status as 'pending' | 'attempted' | 'completed' | 'revisit',
+        timeSpent: 0, // Default time spent when just updating status
       })).unwrap();
       toast.success('Progress updated!');
     } catch (error) {
