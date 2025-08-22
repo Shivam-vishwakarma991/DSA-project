@@ -20,10 +20,16 @@ export default function TopicsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [difficultyFilter, setDifficultyFilter] = useState('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     dispatch(fetchTopics());
-  }, [dispatch]);
+  }, [dispatch, mounted]);
 
   const filteredTopics = topics.filter(topic => {
     const matchesSearch = topic.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -32,7 +38,7 @@ export default function TopicsPage() {
     return matchesSearch && matchesDifficulty;
   });
 
-  if (loading) {
+  if (!mounted || loading) {
     return <Loader fullScreen />;
   }
 

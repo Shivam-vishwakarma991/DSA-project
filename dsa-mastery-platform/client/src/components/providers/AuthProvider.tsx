@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/store';
 import { refreshToken, setUser } from '@/store/slices/authSlice';
@@ -10,8 +10,15 @@ import Cookies from 'js-cookie';
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch<AppDispatch>();
   const { isAuthenticated, loading } = useSelector((state: RootState) => state.auth);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+
     const initAuth = async () => {
       // Check for existing token
       const token = Cookies.get('token');
@@ -51,24 +58,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
 
     initAuth();
-  }, [dispatch, isAuthenticated]);
+  }, [dispatch, isAuthenticated, mounted]);
 
   // Set up token refresh interval
   useEffect(() => {
-    if (isAuthenticated) {
-      const refreshInterval = setInterval(async () => {
-        try {
-          await dispatch(refreshToken()).unwrap();
-        } catch (error) {
-          console.error('Token refresh failed:', error);
-        }
-      }, 20 * 60 * 1000); // Refresh every 20 minutes
+    if (!mounted || !isAuthenticated) return;
 
-      return () => clearInterval(refreshInterval);
-    }
-  }, [dispatch, isAuthenticated]);
+    const refreshInterval = setInterval(async () => {
+      try {
+        await dispatch(refreshToken()).unwrap();
+      } catch (error) {
+        console.error('Token refresh failed:', error);
+      }
+    }, 20 * 60 * 1000); // Refresh every 20 minutes
 
-  if (loading) {
+    return () => clearInterval(refreshInterval);
+  }, [dispatch, isAuthenticated, mounted]);
+
+  if (!mounted || loading) {
     return <Loader fullScreen text="Authenticating..." />;
   }
 

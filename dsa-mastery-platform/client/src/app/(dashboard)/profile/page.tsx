@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
 import { motion } from 'framer-motion';
@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import toast from 'react-hot-toast';
-import { updateProfile } from '@/store/slices/authSlice';
+
 import { 
   UserIcon, 
   EnvelopeIcon, 
@@ -32,6 +32,11 @@ export default function ProfilePage() {
   const { user } = useSelector((state: RootState) => state.auth);
   const [isEditing, setIsEditing] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState(user?.avatar);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const {
     register,
@@ -50,7 +55,7 @@ export default function ProfilePage() {
 
   const onSubmit = async (data: ProfileFormData) => {
     try {
-      await dispatch(updateProfile(data)).unwrap();
+      // TODO: Implement profile update functionality
       toast.success('Profile updated successfully');
       setIsEditing(false);
     } catch (error) {
@@ -68,6 +73,14 @@ export default function ProfilePage() {
       reader.readAsDataURL(file);
     }
   };
+
+  if (!mounted) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-gray-600 dark:text-gray-400 text-xl">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">

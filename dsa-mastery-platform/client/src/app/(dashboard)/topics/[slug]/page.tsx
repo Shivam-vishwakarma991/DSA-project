@@ -23,15 +23,20 @@ export default function TopicDetailPage() {
   const dispatch = useDispatch<AppDispatch>();
   const { currentTopic, problems, loading } = useSelector((state: RootState) => state.topics);
   const { userProgress } = useSelector((state: RootState) => state.progress);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (params.slug) {
-      dispatch(fetchTopicDetails(params.slug as string));
-      dispatch(fetchTopicProblems(params.slug as string));
-    }
-  }, [dispatch, params.slug]);
+    setMounted(true);
+  }, []);
 
-  if (loading || !currentTopic) {
+  useEffect(() => {
+    if (!mounted || !params.slug) return;
+    
+    dispatch(fetchTopicDetails(params.slug as string));
+    dispatch(fetchTopicProblems(params.slug as string));
+  }, [dispatch, params.slug, mounted]);
+
+  if (!mounted || loading || !currentTopic) {
     return <Loader fullScreen />;
   }
 

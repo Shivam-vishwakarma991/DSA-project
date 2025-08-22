@@ -21,21 +21,28 @@ export default function DashboardPage() {
   const { topics, loading: topicsLoading } = useSelector((state: RootState) => state.topics);
   const { userProgress, statistics, streak } = useSelector((state: RootState) => state.progress);
   const [showTour, setShowTour] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
     // Fetch initial data
     dispatch(fetchTopics());
     if (user) {
-      dispatch(fetchUserProgress(user.id));
+      dispatch(fetchUserProgress(user._id));
       
       // Show tour for new users
       if (user.stats.totalSolved === 0) {
         setShowTour(true);
       }
     }
-  }, [dispatch, user]);
+  }, [dispatch, user, mounted]);
 
-  if (topicsLoading) {
+  if (!mounted || topicsLoading) {
     return <Loader fullScreen />;
   }
 
