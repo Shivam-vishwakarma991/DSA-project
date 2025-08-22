@@ -1,1 +1,9 @@
 2025-08-22 11:23:42:2342 [31merror[39m: [31mSeed failed: queryTxt ETIMEOUT cluster0.sfhwddx.mongodb.net[39m
+2025-08-22 21:46:21:4621 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:46:31:4631 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:46:46:4646 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-22 21:47:27:4727 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-22 21:47:28:4728 [32minfo[39m: [32mCleared existing data[39m
+2025-08-22 21:47:28:4728 [32minfo[39m: [32mCreated 4 topics[39m
+2025-08-22 21:47:28:4728 [32minfo[39m: [32mCreated sample problems[39m
+2025-08-22 21:47:28:4728 [32minfo[39m: [32mCreated admin user[39m

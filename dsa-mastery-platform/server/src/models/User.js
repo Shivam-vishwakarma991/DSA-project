@@ -107,8 +107,9 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   emailVerificationToken: String,
+  emailVerificationExpire: Date,
   passwordResetToken: String,
-  passwordResetExpires: Date,
+  passwordResetExpire: Date,
   refreshTokens: [{
     token: String,
     createdAt: {

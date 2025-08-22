@@ -86,6 +86,7 @@ exports.register = async (req, res, next) => {
       .createHash('sha256')
       .update(verificationToken)
       .digest('hex');
+    user.emailVerificationExpire = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
     
     await user.save();
     
@@ -229,6 +230,172 @@ exports.refreshToken = async (req, res, next) => {
     res.status(401).json({
       success: false,
       message: 'Invalid refresh token',
+    });
+  }
+};
+
+// @desc    Forgot password
+// @route   POST /api/auth/forgot-password
+// @access  Public
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
+    }
+    
+    // Generate reset token
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    user.passwordResetToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+    user.passwordResetExpire = Date.now() + 10 * 60 * 1000; // 10 minutes
+    
+    await user.save();
+    
+    // Send reset email
+    await emailService.sendPasswordResetEmail(user, resetToken);
+    
+    logger.info(`Password reset requested for: ${user.email}`);
+    res.status(200).json({
+      success: true,
+      message: 'Password reset email sent',
+    });
+    
+  } catch (error) {
+    logger.error('Forgot password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error sending reset email',
+    });
+  }
+};
+
+// @desc    Reset password
+// @route   POST /api/auth/reset-password/:token
+// @access  Public
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+    
+    // Get hashed token
+    const passwordResetToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
+    
+    const user = await User.findOne({
+      passwordResetToken,
+      passwordResetExpire: { $gt: Date.now() },
+    });
+    
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired reset token',
+      });
+    }
+    
+    // Set new password
+    user.password = password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpire = undefined;
+    await user.save();
+    
+    logger.info(`Password reset for: ${user.email}`);
+    sendTokenResponse(user, 200, res);
+    
+  } catch (error) {
+    logger.error('Reset password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error resetting password',
+    });
+  }
+};
+
+// @desc    Verify email
+// @route   GET /api/auth/verify-email/:token
+// @access  Public
+exports.verifyEmail = async (req, res, next) => {
+  try {
+    const { token } = req.params;
+    
+    // Get hashed token
+    const emailVerificationToken = crypto
+      .createHash('sha256')
+      .update(token)
+      .digest('hex');
+    
+    const user = await User.findOne({
+      emailVerificationToken,
+      emailVerificationExpire: { $gt: Date.now() },
+    });
+    
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid or expired verification token',
+      });
+    }
+    
+    // Mark email as verified
+    user.isEmailVerified = true;
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpire = undefined;
+    await user.save();
+    
+    logger.info(`Email verified for: ${user.email}`);
+    res.status(200).json({
+      success: true,
+      message: 'Email verified successfully',
+    });
+    
+  } catch (error) {
+    logger.error('Email verification error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error verifying email',
+    });
+  }
+};
+
+// @desc    Update password
+// @route   PUT /api/auth/update-password
+// @access  Private
+exports.updatePassword = async (req, res, next) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    
+    const user = await User.findById(req.user.id).select('+password');
+    
+    // Check current password
+    if (!(await user.comparePassword(currentPassword))) {
+      return res.status(401).json({
+        success: false,
+        message: 'Current password is incorrect',
+      });
+    }
+    
+    // Update password
+    user.password = newPassword;
+    await user.save();
+    
+    logger.info(`Password updated for: ${user.email}`);
+    sendTokenResponse(user, 200, res);
+    
+  } catch (error) {
+    logger.error('Update password error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error updating password',
     });
   }
 };

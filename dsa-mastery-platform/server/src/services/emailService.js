@@ -18,7 +18,7 @@ class EmailService {
       });
     } else {
       // Development email service (Mailtrap, Ethereal, etc.)
-      return nodemailer.createTransporter({
+      return nodemailer.createTransport({
         host: process.env.EMAIL_HOST || 'smtp.mailtrap.io',
         port: process.env.EMAIL_PORT || 2525,
         auth: {
