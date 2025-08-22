@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/hooks/useAuth';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@/store';
+import { fetchUserProgress, fetchRecentActivity, fetchStats, fetchStreak, fetchAchievements } from '@/store/slices/progressSlice';
 import { 
   ChartBarIcon, 
   TrophyIcon, 
@@ -12,8 +15,9 @@ import {
   ExclamationTriangleIcon,
   BookmarkIcon
 } from '@heroicons/react/24/outline';
-import  ProgressChart  from '@/components/dashboard/ProgressChart';
+import ProgressChart from '@/components/dashboard/ProgressChart';
 import { Card } from '@/components/common/Card';
+import { Loader } from '@/components/common/Loader';
 
 interface ProgressStats {
   totalSolved: number;
@@ -48,6 +52,9 @@ interface RecentActivity {
 
 export default function ProgressPage() {
   const { user } = useAuth();
+  const dispatch = useDispatch<AppDispatch>();
+  const { userProgress, statistics, streak, achievements, loading } = useSelector((state: RootState) => state.progress);
+
   const [stats, setStats] = useState<ProgressStats>({
     totalSolved: 0,
     easySolved: 0,
@@ -62,11 +69,45 @@ export default function ProgressPage() {
   });
   const [topicProgress, setTopicProgress] = useState<TopicProgress[]>([]);
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (user) {
-      // In a real app, you would fetch this data from the API
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted || !user) return;
+
+    // Fetch all progress data
+    const fetchProgressData = async () => {
+      try {
+        await Promise.all([
+          dispatch(fetchUserProgress()).unwrap(),
+          dispatch(fetchRecentActivity(10)).unwrap(),
+          dispatch(fetchStats()).unwrap(),
+          dispatch(fetchStreak()).unwrap(),
+          dispatch(fetchAchievements()).unwrap(),
+        ]);
+      } catch (error) {
+        console.error('Failed to fetch progress data:', error);
+      }
+    };
+
+    fetchProgressData();
+  }, [dispatch, mounted, user]);
+
+  // Update stats when data is loaded
+  useEffect(() => {
+    if (user && statistics) {
+      console.log('📊 Progress Data Loaded:', {
+        userStats: user.stats,
+        statistics,
+        userProgress: userProgress.length,
+        topicProgress: topicProgress.length,
+        achievements: achievements.length,
+        achievementsData: achievements
+      });
+      
       setStats({
         totalSolved: user.stats.totalSolved,
         easySolved: user.stats.easySolved,
@@ -75,37 +116,57 @@ export default function ProgressPage() {
         streak: user.stats.streak,
         longestStreak: user.stats.longestStreak,
         totalTimeSpent: user.stats.totalTimeSpent,
-        accuracy: 85, // Mock data
-        topicsCompleted: 12, // Mock data
-        totalTopics: 50,
+        accuracy: userProgress.length > 0 
+          ? Math.round((userProgress.filter(p => p.status === 'completed').length / userProgress.length) * 100)
+          : 0,
+        topicsCompleted: topicProgress.filter(t => t.percentage === 100).length,
+        totalTopics: topicProgress.length,
       });
-
-      // Mock topic progress data
-      setTopicProgress([
-        { topic: 'Arrays', slug: 'arrays', total: 15, completed: 12, attempted: 14, percentage: 80 },
-        { topic: 'Strings', slug: 'strings', total: 12, completed: 8, attempted: 10, percentage: 67 },
-        { topic: 'Linked Lists', slug: 'linked-lists', total: 10, completed: 6, attempted: 8, percentage: 60 },
-        { topic: 'Trees', slug: 'trees', total: 18, completed: 5, attempted: 7, percentage: 28 },
-        { topic: 'Graphs', slug: 'graphs', total: 20, completed: 3, attempted: 5, percentage: 15 },
-      ]);
-
-      // Mock recent activity
-      setRecentActivity([
-        { _id: '1', problemTitle: 'Two Sum', topic: 'Arrays', status: 'completed', date: '2024-01-15', timeSpent: 25 },
-        { _id: '2', problemTitle: 'Valid Parentheses', topic: 'Stacks', status: 'completed', date: '2024-01-14', timeSpent: 30 },
-        { _id: '3', problemTitle: 'Binary Tree Inorder Traversal', topic: 'Trees', status: 'attempted', date: '2024-01-13', timeSpent: 45 },
-        { _id: '4', problemTitle: 'Merge Two Sorted Lists', topic: 'Linked Lists', status: 'completed', date: '2024-01-12', timeSpent: 20 },
-        { _id: '5', problemTitle: 'Valid Anagram', topic: 'Strings', status: 'completed', date: '2024-01-11', timeSpent: 15 },
-      ]);
-
-      setLoading(false);
     }
-  }, [user]);
+  }, [user, statistics, userProgress, topicProgress]);
 
-  if (loading) {
+  // Update topic progress when data is loaded
+  useEffect(() => {
+    if (statistics && 'topicProgress' in statistics) {
+      const topics = statistics.topicProgress || [];
+      setTopicProgress(topics.map((topic: any) => ({
+        topic: topic.topicName || topic.topic,
+        slug: topic.topicSlug || topic.slug,
+        total: topic.total || 0,
+        completed: topic.completed || 0,
+        attempted: topic.attempted || 0,
+        percentage: topic.percentage || 0,
+      })));
+    }
+  }, [statistics]);
+
+  // Update recent activity when data is loaded
+  useEffect(() => {
+    if (userProgress && userProgress.length > 0) {
+      setRecentActivity(userProgress.slice(0, 10).map((activity: any) => ({
+        _id: activity._id,
+        problemTitle: activity.problemTitle || activity.problemId?.title || 'Unknown Problem',
+        topic: activity.topic || activity.topicId?.title || 'Unknown Topic',
+        status: activity.status,
+        date: activity.date || activity.updatedAt || activity.createdAt,
+        timeSpent: activity.timeSpent || 0,
+      })));
+    }
+  }, [userProgress]);
+
+  // Debug achievements data
+  useEffect(() => {
+    console.log('🏆 Achievements Data:', {
+      achievements,
+      achievementsLength: achievements?.length,
+      unlockedAchievements: achievements?.filter((a: any) => a.unlocked)?.length
+    });
+  }, [achievements]);
+
+  if (!mounted || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary-500"></div>
+        <Loader fullScreen text="Loading your progress..." />
       </div>
     );
   }
@@ -298,29 +359,25 @@ export default function ProgressPage() {
               Achievements
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="flex items-center space-x-3 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                <TrophyIcon className="h-8 w-8 text-yellow-500" />
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">First Problem</p>
-                  <p className="text-sm text-gray-500">Solved your first problem</p>
+              {achievements && achievements.length > 0 ? (
+                achievements
+                  .filter((achievement: any) => achievement.unlocked)
+                  .map((achievement: any, index) => (
+                    <div key={index} className="flex items-center space-x-3 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                      <TrophyIcon className="h-8 w-8 text-yellow-500" />
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">{achievement.name}</p>
+                        <p className="text-sm text-gray-500">{achievement.description}</p>
+                      </div>
+                    </div>
+                  ))
+              ) : (
+                <div className="col-span-full text-center py-8">
+                  <TrophyIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <p className="text-gray-500 dark:text-gray-400">No achievements unlocked yet</p>
+                  <p className="text-sm text-gray-400">Keep solving problems to earn achievements!</p>
                 </div>
-              </div>
-              
-              <div className="flex items-center space-x-3 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <FireIcon className="h-8 w-8 text-green-500" />
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">7-Day Streak</p>
-                  <p className="text-sm text-gray-500">Maintained a 7-day solving streak</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <ChartBarIcon className="h-8 w-8 text-blue-500" />
-                <div>
-                  <p className="font-medium text-gray-900 dark:text-white">50 Problems</p>
-                  <p className="text-sm text-gray-500">Solved 50 problems</p>
-                </div>
-              </div>
+              )}
             </div>
           </Card>
         </motion.div>

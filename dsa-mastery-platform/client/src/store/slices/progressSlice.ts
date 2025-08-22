@@ -7,6 +7,7 @@ interface ProgressState {
   statistics: UserStats | null;
   streak: StreakInfo | null;
   leaderboard: any[];
+  achievements: any[];
   loading: boolean;
   error: string | null;
   lastSync: string | null;
@@ -17,6 +18,7 @@ const initialState: ProgressState = {
   statistics: null,
   streak: null,
   leaderboard: [],
+  achievements: [],
   loading: false,
   error: null,
   lastSync: null,
@@ -68,6 +70,14 @@ export const fetchRecentActivity = createAsyncThunk(
   async (limit?: number) => {
     const response = await progressAPI.getRecentActivity(limit);
     return response.data;
+  }
+);
+
+export const fetchAchievements = createAsyncThunk(
+  'progress/fetchAchievements',
+  async () => {
+    const response = await progressAPI.getAchievements();
+    return response.data.data;
   }
 );
 
@@ -155,6 +165,13 @@ const progressSlice = createSlice({
         // The data is already extracted in the thunk
         if (Array.isArray(action.payload)) {
           state.userProgress = action.payload;
+        }
+      })
+      // Fetch Achievements
+      .addCase(fetchAchievements.fulfilled, (state, action) => {
+        // The data is already extracted in the thunk
+        if (Array.isArray(action.payload)) {
+          state.achievements = action.payload;
         }
       });
   },
