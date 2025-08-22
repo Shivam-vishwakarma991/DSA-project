@@ -1,10 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: false,
+  experimental: {
+    appDir: true,
   },
-  eslint: {
-    ignoreDuringBuilds: false,
+  output: 'standalone',
+  images: {
+    domains: ['localhost', 'your-domain.com'],
+  },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
   },
 }
 
