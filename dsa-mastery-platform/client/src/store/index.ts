@@ -1,6 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import authReducer from './slices/authSlice';
+import topicsReducer from './slices/topicsSlice';
+import progressReducer from './slices/progressSlice';
+import uiReducer from './slices/uiSlice';
+
 // Configure persist for auth state
 const authPersistConfig = {
   key: 'auth',
@@ -9,11 +14,6 @@ const authPersistConfig = {
 };
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
-
-import authReducer from './slices/authSlice';
-import topicsReducer from './slices/topicsSlice';
-import progressReducer from './slices/progressSlice';
-import uiReducer from './slices/uiSlice';
 
 export const store = configureStore({
   reducer: {

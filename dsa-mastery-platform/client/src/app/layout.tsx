@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description: 'A comprehensive platform to master Data Structures and Algorithms with structured learning paths, progress tracking, and curated resources.',
   keywords: 'DSA, Data Structures, Algorithms, Coding, Programming, LeetCode, Interview Preparation',
   authors: [{ name: 'DSA Mastery Team' }],
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   openGraph: {
     title: 'DSA Mastery Platform',
     description: 'Master Data Structures & Algorithms with our comprehensive learning platform',

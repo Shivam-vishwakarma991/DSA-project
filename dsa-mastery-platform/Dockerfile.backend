@@ -21,6 +21,6 @@ RUN adduser -S nodejs -u 1001
 RUN chown -R nodejs:nodejs /usr/src/app
 USER nodejs
 
-EXPOSE 5000
+EXPOSE 5001
 
 CMD [ "node", "server.js" ]
