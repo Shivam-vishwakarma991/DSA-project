@@ -38,3 +38,8 @@
 2025-08-23 00:46:18:4618 [31merror[39m: [31mProblem validation failed: _id: Cast to ObjectId failed for value "temp_1755890136743" (type string) at path "_id" because of "BSONError"[39m
 2025-08-23 00:47:10:4710 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
 2025-08-23 00:47:53:4753 [31merror[39m: [31mLogout error: Cannot read properties of undefined (reading 'id')[39m
+2025-08-23 10:39:01:391 [31merror[39m: [31mMongoDB connection failed: queryTxt ETIMEOUT cluster0.sfhwddx.mongodb.net[39m
+2025-08-23 10:54:05:545 [31merror[39m: [31mMongoDB connection failed: queryTxt ETIMEOUT cluster0.sfhwddx.mongodb.net[39m
+2025-08-23 10:56:49:5649 [31merror[39m: [31mMongoDB connection failed: queryTxt ETIMEOUT cluster0.sfhwddx.mongodb.net[39m
+2025-08-23 10:58:30:5830 [31merror[39m: [31mMongoDB connection failed: queryTxt ETIMEOUT cluster0.sfhwddx.mongodb.net[39m
+2025-08-23 11:03:05:35 [31merror[39m: [31mMongoDB connection failed: Could not connect to any servers in your MongoDB Atlas cluster. One common reason is that you're trying to access the database from an IP that isn't whitelisted. Make sure your current IP address is on your Atlas cluster's IP whitelist: https://www.mongodb.com/docs/atlas/security-whitelist/[39m

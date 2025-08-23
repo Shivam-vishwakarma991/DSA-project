@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
 import { logout } from '@/store/slices/authSlice';
+import { toggleSidebar } from '@/store/slices/uiSlice';
 import { useRouter } from 'next/navigation';
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
@@ -22,7 +22,6 @@ export default function Header() {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
   const { theme, toggleTheme } = useTheme();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await dispatch(logout());
@@ -35,7 +34,7 @@ export default function Header() {
         <div className="flex items-center justify-between h-16">
           {/* Mobile menu button */}
           <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            onClick={() => dispatch(toggleSidebar())}
             className="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
           >
             <Bars3Icon className="h-6 w-6" />

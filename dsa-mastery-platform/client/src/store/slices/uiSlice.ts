@@ -17,7 +17,7 @@ interface UIState {
 
 const initialState: UIState = {
   theme: 'system',
-  sidebarOpen: true,
+  sidebarOpen: false, // Start with sidebar closed on mobile
   tourCompleted: false,
   notifications: [],
   modals: {},

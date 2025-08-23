@@ -1,7 +1,10 @@
-import { useState } from 'react';
 import { usePathname } from 'next/navigation';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '@/store';
+import { setSidebarOpen } from '@/store/slices/uiSlice';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
 import {
   HomeIcon,
   AcademicCapIcon,
@@ -24,10 +27,118 @@ const navigation = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { sidebarOpen } = useSelector((state: RootState) => state.ui);
+
+  // Handle responsive sidebar behavior
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        // On desktop, always keep sidebar open
+        dispatch(setSidebarOpen(true));
+      } else {
+        // On mobile, keep sidebar closed
+        dispatch(setSidebarOpen(false));
+      }
+    };
+
+    // Set initial state
+    handleResize();
+
+    // Listen for window resize
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [dispatch]);
 
   return (
     <>
+      {/* Mobile Sidebar Overlay */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => dispatch(setSidebarOpen(false))}
+              className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+            />
+            
+            {/* Mobile Sidebar */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              className="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 lg:hidden"
+            >
+              <div className="flex flex-col h-full">
+                {/* Mobile Header */}
+                <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
+                  <Link href="/dashboard" className="flex items-center gap-2">
+                    <CodeBracketIcon className="h-8 w-8 text-primary-500" />
+                    <span className="text-xl font-bold text-gray-900 dark:text-white">
+                      DSA Mastery
+                    </span>
+                  </Link>
+                  <button
+                    onClick={() => dispatch(setSidebarOpen(false))}
+                    className="p-2 rounded-md text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+                  >
+                    <XMarkIcon className="h-6 w-6" />
+                  </button>
+                </div>
+
+                {/* Mobile Navigation */}
+                <nav className="flex-1 px-4 py-4 space-y-1">
+                  {navigation.map((item) => {
+                    const isActive = pathname === item.href;
+                    return (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => dispatch(setSidebarOpen(false))}
+                        className={`
+                          flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
+                          ${isActive
+                            ? 'bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400'
+                            : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                          }
+                        `}
+                      >
+                        <item.icon className="h-5 w-5" />
+                        <span className="font-medium">{item.name}</span>
+                        {isActive && (
+                          <motion.div
+                            layoutId="mobile-sidebar-indicator"
+                            className="absolute left-0 w-1 h-8 bg-primary-500 rounded-r-full"
+                          />
+                        )}
+                      </Link>
+                    );
+                  })}
+                </nav>
+
+                {/* Mobile Progress Summary */}
+                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                  <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg p-4 text-white">
+                    <h3 className="font-semibold mb-2">Daily Goal</h3>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm">2 of 3 problems</span>
+                      <span className="text-sm">67%</span>
+                    </div>
+                    <div className="w-full bg-white/20 rounded-full h-2">
+                      <div className="bg-white rounded-full h-2 w-2/3" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
       {/* Desktop Sidebar */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
         <div className="flex flex-col flex-grow bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
