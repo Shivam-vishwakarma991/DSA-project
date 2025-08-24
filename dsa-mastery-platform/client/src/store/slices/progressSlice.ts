@@ -114,14 +114,14 @@ const progressSlice = createSlice({
       })
       .addCase(fetchUserProgress.fulfilled, (state, action) => {
         state.loading = false;
-        // Handle the API response structure - the data is already extracted in the thunk
+        // Handle the comprehensive progress data structure
         if (action.payload && typeof action.payload === 'object') {
+          // Store the entire payload as statistics since it contains all the data
+          state.statistics = action.payload;
+          
+          // Extract recent activity for userProgress
           if ('recentActivity' in action.payload && Array.isArray(action.payload.recentActivity)) {
             state.userProgress = action.payload.recentActivity;
-          }
-          if ('userStats' in action.payload) {
-            // Store the user stats directly since it matches the User interface stats
-            state.statistics = action.payload.userStats as any;
           }
         }
         state.lastSync = new Date().toISOString();

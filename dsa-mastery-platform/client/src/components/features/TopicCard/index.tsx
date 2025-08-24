@@ -15,6 +15,7 @@ interface TopicCardProps {
 }
 
 export default function TopicCard({ topic, viewMode, progress = 0 }: TopicCardProps) {
+  console.log('🔍 Topic:', topic);
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case 'Beginner': return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';

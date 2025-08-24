@@ -345,3 +345,48 @@
 2025-08-24 10:42:26:4226 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
 2025-08-24 10:42:26:4226 [32minfo[39m: [32m🚀 Server running on port 5002[39m
 2025-08-24 10:42:26:4226 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:30:13:3013 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:30:13:3013 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:30:13:3013 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:30:17:3017 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:30:17:3017 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:30:17:3017 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:30:23:3023 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:30:23:3023 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:30:23:3023 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:30:27:3027 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:30:27:3027 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:30:27:3027 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:30:58:3058 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-24 11:30:59:3059 [32minfo[39m: [32mCleared existing data[39m
+2025-08-24 11:30:59:3059 [32minfo[39m: [32mCreated 18 topics[39m
+2025-08-24 11:30:59:3059 [32minfo[39m: [32mCreated 50 problems[39m
+2025-08-24 11:31:04:314 [32minfo[39m: [32mCreated 16 users[39m
+2025-08-24 11:31:05:315 [32minfo[39m: [32mCreated 102 progress records[39m
+2025-08-24 11:34:57:3457 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:34:57:3457 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:34:57:3457 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:35:47:3547 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:35:47:3547 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:35:47:3547 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:38:06:386 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:38:06:386 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:38:06:386 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:39:02:392 [32minfo[39m: [32mConnected to MongoDB[39m
+2025-08-24 11:39:02:392 [32minfo[39m: [32mCleared existing data[39m
+2025-08-24 11:39:02:392 [32minfo[39m: [32mCreated 18 topics[39m
+2025-08-24 11:39:02:392 [32minfo[39m: [32mCreated 95 problems[39m
+2025-08-24 11:39:08:398 [32minfo[39m: [32mCreated 16 users[39m
+2025-08-24 11:39:08:398 [32minfo[39m: [32mCreated 100 progress records[39m
+2025-08-24 11:39:18:3918 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:39:18:3918 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:39:18:3918 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:41:04:414 [33mwarn[39m: [33mMongoDB disconnected[39m
+2025-08-24 11:41:26:4126 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:41:26:4126 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:41:26:4126 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:45:18:4518 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 11:45:18:4518 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 11:45:18:4518 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 11:46:31:4631 [32minfo[39m: [32mUser logged in: admin@dsamastery.com[39m
+2025-08-24 12:22:54:2254 [32minfo[39m: [32mUser logged in: admin@dsamastery.com[39m

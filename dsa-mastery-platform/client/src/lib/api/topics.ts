@@ -66,4 +66,13 @@ export const topicsAPI = {
 
   getProblem: (id: string) => 
     api.get<{ success: boolean; data: Problem }>(`/topics/problems/${id}`),
+
+  createProblem: (data: Partial<Problem>) => 
+    api.post<{ success: boolean; data: Problem }>('/topics/problems', data),
+
+  updateProblem: (id: string, data: Partial<Problem>) => 
+    api.put<{ success: boolean; data: Problem }>(`/topics/problems/${id}`, data),
+
+  deleteProblem: (id: string) => 
+    api.delete<{ success: boolean; message: string }>(`/topics/problems/${id}`),
 };

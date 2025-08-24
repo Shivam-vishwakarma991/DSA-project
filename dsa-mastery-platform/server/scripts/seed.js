@@ -275,6 +275,21 @@ const seedData = async () => {
     const arrayTopic = insertedTopics.find(t => t.slug === 'arrays');
     const stringTopic = insertedTopics.find(t => t.slug === 'strings');
     const linkedListTopic = insertedTopics.find(t => t.slug === 'linked-lists');
+    const stacksTopic = insertedTopics.find(t => t.slug === 'stacks');
+    const queuesTopic = insertedTopics.find(t => t.slug === 'queues');
+    const hashTablesTopic = insertedTopics.find(t => t.slug === 'hash-tables');
+    const treesTopic = insertedTopics.find(t => t.slug === 'trees');
+    const heapsTopic = insertedTopics.find(t => t.slug === 'heaps');
+    const graphsTopic = insertedTopics.find(t => t.slug === 'graphs');
+    const dynamicProgrammingTopic = insertedTopics.find(t => t.slug === 'dynamic-programming');
+    const greedyTopic = insertedTopics.find(t => t.slug === 'greedy-algorithms');
+    const backtrackingTopic = insertedTopics.find(t => t.slug === 'backtracking');
+    const sortingTopic = insertedTopics.find(t => t.slug === 'sorting-algorithms');
+    const searchingTopic = insertedTopics.find(t => t.slug === 'searching-algorithms');
+    const bitManipulationTopic = insertedTopics.find(t => t.slug === 'bit-manipulation');
+    const recursionTopic = insertedTopics.find(t => t.slug === 'recursion');
+    const twoPointersTopic = insertedTopics.find(t => t.slug === 'two-pointers');
+    const slidingWindowTopic = insertedTopics.find(t => t.slug === 'sliding-window');
     
     const stringProblems = [
       {
@@ -1317,7 +1332,717 @@ const seedData = async () => {
         estimatedTime: 60,
       },
     ];
-    problemsData.push(...linkedListProblems);
+
+    // Stacks Problems
+    const stacksProblems = [
+      {
+        topicId: stacksTopic._id,
+        title: 'Valid Parentheses',
+        description: 'Check if parentheses are valid using stack',
+        difficulty: 'Easy',
+        order: 1,
+        tags: ['stack', 'string'],
+        companies: ['Amazon', 'Facebook', 'Microsoft'],
+        frequency: 90,
+        links: {
+          leetcode: 'https://leetcode.com/problems/valid-parentheses/',
+        },
+        estimatedTime: 20,
+      },
+      {
+        topicId: stacksTopic._id,
+        title: 'Min Stack',
+        description: 'Design a stack that supports push, pop, top, and retrieving the minimum element',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['stack', 'design'],
+        companies: ['Amazon', 'Microsoft', 'Google'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/min-stack/',
+        },
+        estimatedTime: 30,
+      },
+      {
+        topicId: stacksTopic._id,
+        title: 'Evaluate Reverse Polish Notation',
+        description: 'Evaluate the value of an arithmetic expression in Reverse Polish Notation',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['stack', 'math'],
+        companies: ['Amazon', 'Google'],
+        frequency: 75,
+        links: {
+          leetcode: 'https://leetcode.com/problems/evaluate-reverse-polish-notation/',
+        },
+        estimatedTime: 25,
+      },
+    ];
+
+    // Queues Problems
+    const queuesProblems = [
+      {
+        topicId: queuesTopic._id,
+        title: 'Implement Queue using Stacks',
+        description: 'Implement a first in first out (FIFO) queue using only two stacks',
+        difficulty: 'Easy',
+        order: 1,
+        tags: ['queue', 'stack', 'design'],
+        companies: ['Amazon', 'Microsoft'],
+        frequency: 80,
+        links: {
+          leetcode: 'https://leetcode.com/problems/implement-queue-using-stacks/',
+        },
+        estimatedTime: 25,
+      },
+      {
+        topicId: queuesTopic._id,
+        title: 'Circular Queue',
+        description: 'Design your implementation of the circular queue',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['queue', 'design', 'array'],
+        companies: ['Amazon', 'Google'],
+        frequency: 70,
+        links: {
+          leetcode: 'https://leetcode.com/problems/design-circular-queue/',
+        },
+        estimatedTime: 35,
+      },
+      {
+        topicId: queuesTopic._id,
+        title: 'Number of Recent Calls',
+        description: 'Count the number of recent requests within a time window',
+        difficulty: 'Easy',
+        order: 3,
+        tags: ['queue', 'sliding-window'],
+        companies: ['Amazon', 'Microsoft'],
+        frequency: 65,
+        links: {
+          leetcode: 'https://leetcode.com/problems/number-of-recent-calls/',
+        },
+        estimatedTime: 20,
+      },
+    ];
+
+    // Hash Tables Problems
+    const hashTablesProblems = [
+      {
+        topicId: hashTablesTopic._id,
+        title: 'Two Sum',
+        description: 'Find two numbers that add up to target',
+        difficulty: 'Easy',
+        order: 1,
+        tags: ['hash-table', 'array'],
+        companies: ['Google', 'Amazon', 'Microsoft'],
+        frequency: 95,
+        links: {
+          leetcode: 'https://leetcode.com/problems/two-sum/',
+        },
+        estimatedTime: 15,
+      },
+      {
+        topicId: hashTablesTopic._id,
+        title: 'Group Anagrams',
+        description: 'Group strings that are anagrams of each other',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['hash-table', 'string', 'sorting'],
+        companies: ['Amazon', 'Facebook', 'Apple'],
+        frequency: 86,
+        links: {
+          leetcode: 'https://leetcode.com/problems/group-anagrams/',
+        },
+        estimatedTime: 25,
+      },
+      {
+        topicId: hashTablesTopic._id,
+        title: 'Longest Substring Without Repeating Characters',
+        description: 'Find the length of longest substring without repeating characters',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['hash-table', 'string', 'sliding-window'],
+        companies: ['Amazon', 'Google', 'Facebook'],
+        frequency: 95,
+        links: {
+          leetcode: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
+        },
+        estimatedTime: 30,
+      },
+    ];
+
+    // Trees Problems
+    const treesProblems = [
+      {
+        topicId: treesTopic._id,
+        title: 'Maximum Depth of Binary Tree',
+        description: 'Find the maximum depth of a binary tree',
+        difficulty: 'Easy',
+        order: 1,
+        tags: ['tree', 'recursion', 'dfs'],
+        companies: ['Amazon', 'Microsoft', 'Apple'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/maximum-depth-of-binary-tree/',
+        },
+        estimatedTime: 20,
+      },
+      {
+        topicId: treesTopic._id,
+        title: 'Binary Tree Inorder Traversal',
+        description: 'Return the inorder traversal of its nodes values',
+        difficulty: 'Easy',
+        order: 2,
+        tags: ['tree', 'stack', 'recursion'],
+        companies: ['Amazon', 'Microsoft'],
+        frequency: 80,
+        links: {
+          leetcode: 'https://leetcode.com/problems/binary-tree-inorder-traversal/',
+        },
+        estimatedTime: 25,
+      },
+      {
+        topicId: treesTopic._id,
+        title: 'Validate Binary Search Tree',
+        description: 'Check if a binary tree is a valid binary search tree',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['tree', 'recursion', 'dfs'],
+        companies: ['Amazon', 'Microsoft', 'Facebook'],
+        frequency: 88,
+        links: {
+          leetcode: 'https://leetcode.com/problems/validate-binary-search-tree/',
+        },
+        estimatedTime: 30,
+      },
+    ];
+
+    // Heaps Problems
+    const heapsProblems = [
+      {
+        topicId: heapsTopic._id,
+        title: 'Kth Largest Element in an Array',
+        description: 'Find the kth largest element in an unsorted array',
+        difficulty: 'Medium',
+        order: 1,
+        tags: ['heap', 'array', 'sorting'],
+        companies: ['Amazon', 'Facebook', 'Google'],
+        frequency: 90,
+        links: {
+          leetcode: 'https://leetcode.com/problems/kth-largest-element-in-an-array/',
+        },
+        estimatedTime: 25,
+      },
+      {
+        topicId: heapsTopic._id,
+        title: 'Merge k Sorted Lists',
+        description: 'Merge k sorted linked lists into one sorted list',
+        difficulty: 'Hard',
+        order: 2,
+        tags: ['heap', 'linked-list', 'divide-conquer'],
+        companies: ['Amazon', 'Facebook', 'Google'],
+        frequency: 92,
+        links: {
+          leetcode: 'https://leetcode.com/problems/merge-k-sorted-lists/',
+        },
+        estimatedTime: 45,
+      },
+      {
+        topicId: heapsTopic._id,
+        title: 'Top K Frequent Elements',
+        description: 'Return the k most frequent elements',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['heap', 'hash-table', 'sorting'],
+        companies: ['Amazon', 'Facebook', 'Google'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/top-k-frequent-elements/',
+        },
+        estimatedTime: 30,
+      },
+    ];
+
+    // Graphs Problems
+    const graphsProblems = [
+      {
+        topicId: graphsTopic._id,
+        title: 'Number of Islands',
+        description: 'Count the number of islands in a 2D grid',
+        difficulty: 'Medium',
+        order: 1,
+        tags: ['graph', 'dfs', 'bfs'],
+        companies: ['Amazon', 'Google', 'Facebook'],
+        frequency: 95,
+        links: {
+          leetcode: 'https://leetcode.com/problems/number-of-islands/',
+        },
+        estimatedTime: 35,
+      },
+      {
+        topicId: graphsTopic._id,
+        title: 'Course Schedule',
+        description: 'Check if it is possible to finish all courses',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['graph', 'topological-sort', 'dfs'],
+        companies: ['Amazon', 'Google', 'Microsoft'],
+        frequency: 88,
+        links: {
+          leetcode: 'https://leetcode.com/problems/course-schedule/',
+        },
+        estimatedTime: 40,
+      },
+      {
+        topicId: graphsTopic._id,
+        title: 'Clone Graph',
+        description: 'Return a deep copy of the graph',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['graph', 'dfs', 'bfs', 'hash-table'],
+        companies: ['Amazon', 'Google', 'Facebook'],
+        frequency: 82,
+        links: {
+          leetcode: 'https://leetcode.com/problems/clone-graph/',
+        },
+        estimatedTime: 35,
+      },
+    ];
+
+    // Dynamic Programming Problems
+    const dynamicProgrammingProblems = [
+      {
+        topicId: dynamicProgrammingTopic._id,
+        title: 'Climbing Stairs',
+        description: 'Count the number of ways to climb n stairs',
+        difficulty: 'Easy',
+        order: 1,
+        tags: ['dynamic-programming', 'math'],
+        companies: ['Amazon', 'Microsoft', 'Apple'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/climbing-stairs/',
+        },
+        estimatedTime: 20,
+      },
+      {
+        topicId: dynamicProgrammingTopic._id,
+        title: 'House Robber',
+        description: 'Find the maximum amount of money you can rob tonight',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['dynamic-programming', 'array'],
+        companies: ['Amazon', 'Google', 'Facebook'],
+        frequency: 90,
+        links: {
+          leetcode: 'https://leetcode.com/problems/house-robber/',
+        },
+        estimatedTime: 30,
+      },
+      {
+        topicId: dynamicProgrammingTopic._id,
+        title: 'Longest Increasing Subsequence',
+        description: 'Find the length of longest increasing subsequence',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['dynamic-programming', 'array', 'binary-search'],
+        companies: ['Amazon', 'Google', 'Microsoft'],
+        frequency: 88,
+        links: {
+          leetcode: 'https://leetcode.com/problems/longest-increasing-subsequence/',
+        },
+        estimatedTime: 35,
+      },
+    ];
+
+    // Greedy Algorithms Problems
+    const greedyProblems = [
+      {
+        topicId: greedyTopic._id,
+        title: 'Jump Game',
+        description: 'Determine if you can reach the last index',
+        difficulty: 'Medium',
+        order: 1,
+        tags: ['greedy', 'array'],
+        companies: ['Amazon', 'Google', 'Facebook'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/jump-game/',
+        },
+        estimatedTime: 25,
+      },
+      {
+        topicId: greedyTopic._id,
+        title: 'Gas Station',
+        description: 'Find the starting gas station index to complete the circuit',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['greedy', 'array'],
+        companies: ['Amazon', 'Google'],
+        frequency: 75,
+        links: {
+          leetcode: 'https://leetcode.com/problems/gas-station/',
+        },
+        estimatedTime: 30,
+      },
+      {
+        topicId: greedyTopic._id,
+        title: 'Task Scheduler',
+        description: 'Find the least number of units of times needed to complete all tasks',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['greedy', 'array', 'hash-table'],
+        companies: ['Amazon', 'Google', 'Facebook'],
+        frequency: 80,
+        links: {
+          leetcode: 'https://leetcode.com/problems/task-scheduler/',
+        },
+        estimatedTime: 35,
+      },
+    ];
+
+    // Backtracking Problems
+    const backtrackingProblems = [
+      {
+        topicId: backtrackingTopic._id,
+        title: 'Subsets',
+        description: 'Return all possible subsets of the array',
+        difficulty: 'Medium',
+        order: 1,
+        tags: ['backtracking', 'array'],
+        companies: ['Amazon', 'Google', 'Facebook'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/subsets/',
+        },
+        estimatedTime: 30,
+      },
+      {
+        topicId: backtrackingTopic._id,
+        title: 'Permutations',
+        description: 'Return all possible permutations of the array',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['backtracking', 'array'],
+        companies: ['Amazon', 'Google', 'Microsoft'],
+        frequency: 88,
+        links: {
+          leetcode: 'https://leetcode.com/problems/permutations/',
+        },
+        estimatedTime: 35,
+      },
+      {
+        topicId: backtrackingTopic._id,
+        title: 'N-Queens',
+        description: 'Return all distinct solutions to the n-queens puzzle',
+        difficulty: 'Hard',
+        order: 3,
+        tags: ['backtracking', 'array'],
+        companies: ['Amazon', 'Google', 'Microsoft'],
+        frequency: 75,
+        links: {
+          leetcode: 'https://leetcode.com/problems/n-queens/',
+        },
+        estimatedTime: 45,
+      },
+    ];
+
+    // Sorting Algorithms Problems
+    const sortingProblems = [
+      {
+        topicId: sortingTopic._id,
+        title: 'Sort Colors',
+        description: 'Sort an array of 0s, 1s, and 2s in-place',
+        difficulty: 'Medium',
+        order: 1,
+        tags: ['sorting', 'array', 'two-pointers'],
+        companies: ['Amazon', 'Microsoft', 'Facebook'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/sort-colors/',
+        },
+        estimatedTime: 25,
+      },
+      {
+        topicId: sortingTopic._id,
+        title: 'Merge Sorted Array',
+        description: 'Merge two sorted arrays into one',
+        difficulty: 'Easy',
+        order: 2,
+        tags: ['sorting', 'array', 'two-pointers'],
+        companies: ['Amazon', 'Microsoft', 'Apple'],
+        frequency: 80,
+        links: {
+          leetcode: 'https://leetcode.com/problems/merge-sorted-array/',
+        },
+        estimatedTime: 20,
+      },
+      {
+        topicId: sortingTopic._id,
+        title: 'Kth Largest Element in an Array',
+        description: 'Find the kth largest element in an unsorted array',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['sorting', 'array', 'heap'],
+        companies: ['Amazon', 'Facebook', 'Google'],
+        frequency: 90,
+        links: {
+          leetcode: 'https://leetcode.com/problems/kth-largest-element-in-an-array/',
+        },
+        estimatedTime: 25,
+      },
+    ];
+
+    // Searching Algorithms Problems
+    const searchingProblems = [
+      {
+        topicId: searchingTopic._id,
+        title: 'Binary Search',
+        description: 'Search for a target in a sorted array',
+        difficulty: 'Easy',
+        order: 1,
+        tags: ['binary-search', 'array'],
+        companies: ['Amazon', 'Microsoft', 'Google'],
+        frequency: 90,
+        links: {
+          leetcode: 'https://leetcode.com/problems/binary-search/',
+        },
+        estimatedTime: 15,
+      },
+      {
+        topicId: searchingTopic._id,
+        title: 'Search in Rotated Sorted Array',
+        description: 'Search for a target in a rotated sorted array',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['binary-search', 'array'],
+        companies: ['Facebook', 'Amazon', 'Microsoft'],
+        frequency: 90,
+        links: {
+          leetcode: 'https://leetcode.com/problems/search-in-rotated-sorted-array/',
+        },
+        estimatedTime: 35,
+      },
+      {
+        topicId: searchingTopic._id,
+        title: 'Find First and Last Position of Element in Sorted Array',
+        description: 'Find the starting and ending position of a given target value',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['binary-search', 'array'],
+        companies: ['Amazon', 'Google', 'Facebook'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/',
+        },
+        estimatedTime: 30,
+      },
+    ];
+
+    // Bit Manipulation Problems
+    const bitManipulationProblems = [
+      {
+        topicId: bitManipulationTopic._id,
+        title: 'Number of 1 Bits',
+        description: 'Return the number of 1 bits in a given integer',
+        difficulty: 'Easy',
+        order: 1,
+        tags: ['bit-manipulation'],
+        companies: ['Amazon', 'Microsoft', 'Apple'],
+        frequency: 75,
+        links: {
+          leetcode: 'https://leetcode.com/problems/number-of-1-bits/',
+        },
+        estimatedTime: 15,
+      },
+      {
+        topicId: bitManipulationTopic._id,
+        title: 'Single Number',
+        description: 'Find the single number that appears only once',
+        difficulty: 'Easy',
+        order: 2,
+        tags: ['bit-manipulation', 'array'],
+        companies: ['Amazon', 'Google', 'Microsoft'],
+        frequency: 80,
+        links: {
+          leetcode: 'https://leetcode.com/problems/single-number/',
+        },
+        estimatedTime: 20,
+      },
+      {
+        topicId: bitManipulationTopic._id,
+        title: 'Power of Two',
+        description: 'Check if a given integer is a power of two',
+        difficulty: 'Easy',
+        order: 3,
+        tags: ['bit-manipulation', 'math'],
+        companies: ['Amazon', 'Microsoft'],
+        frequency: 70,
+        links: {
+          leetcode: 'https://leetcode.com/problems/power-of-two/',
+        },
+        estimatedTime: 15,
+      },
+    ];
+
+    // Recursion Problems
+    const recursionProblems = [
+      {
+        topicId: recursionTopic._id,
+        title: 'Fibonacci Number',
+        description: 'Calculate the nth Fibonacci number',
+        difficulty: 'Easy',
+        order: 1,
+        tags: ['recursion', 'math', 'dynamic-programming'],
+        companies: ['Amazon', 'Microsoft', 'Apple'],
+        frequency: 80,
+        links: {
+          leetcode: 'https://leetcode.com/problems/fibonacci-number/',
+        },
+        estimatedTime: 20,
+      },
+      {
+        topicId: recursionTopic._id,
+        title: 'Pascal\'s Triangle',
+        description: 'Generate Pascal\'s triangle',
+        difficulty: 'Easy',
+        order: 2,
+        tags: ['recursion', 'array', 'math'],
+        companies: ['Amazon', 'Microsoft', 'Google'],
+        frequency: 75,
+        links: {
+          leetcode: 'https://leetcode.com/problems/pascals-triangle/',
+        },
+        estimatedTime: 25,
+      },
+      {
+        topicId: recursionTopic._id,
+        title: 'Pow(x, n)',
+        description: 'Implement pow(x, n), which calculates x raised to the power n',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['recursion', 'math'],
+        companies: ['Amazon', 'Google', 'Microsoft'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/powx-n/',
+        },
+        estimatedTime: 30,
+      },
+    ];
+
+    // Two Pointers Problems
+    const twoPointersProblems = [
+      {
+        topicId: twoPointersTopic._id,
+        title: 'Two Sum II - Input Array Is Sorted',
+        description: 'Find two numbers that add up to target in a sorted array',
+        difficulty: 'Medium',
+        order: 1,
+        tags: ['two-pointers', 'array'],
+        companies: ['Amazon', 'Google', 'Microsoft'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/',
+        },
+        estimatedTime: 20,
+      },
+      {
+        topicId: twoPointersTopic._id,
+        title: 'Container With Most Water',
+        description: 'Find two lines that together with x-axis forms a container with most water',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['two-pointers', 'array', 'greedy'],
+        companies: ['Amazon', 'Adobe', 'Apple'],
+        frequency: 86,
+        links: {
+          leetcode: 'https://leetcode.com/problems/container-with-most-water/',
+        },
+        estimatedTime: 30,
+      },
+      {
+        topicId: twoPointersTopic._id,
+        title: '3Sum',
+        description: 'Find all unique triplets that sum to zero',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['two-pointers', 'array', 'sorting'],
+        companies: ['Amazon', 'Facebook', 'Apple'],
+        frequency: 88,
+        links: {
+          leetcode: 'https://leetcode.com/problems/3sum/',
+        },
+        estimatedTime: 40,
+      },
+    ];
+
+    // Sliding Window Problems
+    const slidingWindowProblems = [
+      {
+        topicId: slidingWindowTopic._id,
+        title: 'Minimum Window Substring',
+        description: 'Find minimum window containing all characters',
+        difficulty: 'Hard',
+        order: 1,
+        tags: ['sliding-window', 'hash-table', 'string'],
+        companies: ['Facebook', 'Amazon', 'Google'],
+        frequency: 92,
+        links: {
+          leetcode: 'https://leetcode.com/problems/minimum-window-substring/',
+        },
+        estimatedTime: 45,
+      },
+      {
+        topicId: slidingWindowTopic._id,
+        title: 'Longest Substring Without Repeating Characters',
+        description: 'Find the length of longest substring without repeating characters',
+        difficulty: 'Medium',
+        order: 2,
+        tags: ['sliding-window', 'hash-table', 'string'],
+        companies: ['Amazon', 'Google', 'Facebook'],
+        frequency: 95,
+        links: {
+          leetcode: 'https://leetcode.com/problems/longest-substring-without-repeating-characters/',
+        },
+        estimatedTime: 30,
+      },
+      {
+        topicId: slidingWindowTopic._id,
+        title: 'Maximum Subarray',
+        description: 'Find the contiguous subarray with the largest sum',
+        difficulty: 'Medium',
+        order: 3,
+        tags: ['sliding-window', 'array', 'dynamic-programming'],
+        companies: ['Amazon', 'Microsoft', 'LinkedIn'],
+        frequency: 85,
+        links: {
+          leetcode: 'https://leetcode.com/problems/maximum-subarray/',
+        },
+        estimatedTime: 25,
+      },
+    ];
+
+    problemsData.push(
+      ...linkedListProblems,
+      ...arrayProblems,
+      ...stringProblems,
+      ...stacksProblems,
+      ...queuesProblems,
+      ...hashTablesProblems,
+      ...treesProblems,
+      ...heapsProblems,
+      ...graphsProblems,
+      ...dynamicProgrammingProblems,
+      ...greedyProblems,
+      ...backtrackingProblems,
+      ...sortingProblems,
+      ...searchingProblems,
+      ...bitManipulationProblems,
+      ...recursionProblems,
+      ...twoPointersProblems,
+      ...slidingWindowProblems
+    );
 
     logger.info(`Created ${insertedTopics.length} topics`);
 

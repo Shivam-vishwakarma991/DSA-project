@@ -2,9 +2,43 @@ import api from './instance';
 import { Progress, UserStats, StreakInfo } from '../../types';
 
 export const progressAPI = {
-  // Get user's overall progress
+  // Get user's overall progress with comprehensive stats
   getUserProgress: () => 
-    api.get<{ success: boolean; data: UserStats }>('/progress/user'),
+    api.get<{ success: boolean; data: {
+      completionStats: {
+        total: number;
+        completed: number;
+        attempted: number;
+        percentage: number;
+      };
+      topicProgress: Array<{
+        _id: string;
+        topicName: string;
+        topicSlug: string;
+        total: number;
+        completed: number;
+        attempted: number;
+        percentage: number;
+      }>;
+      recentActivity: Array<{
+        _id: string;
+        problemTitle: string;
+        topic: string;
+        status: string;
+        date: string;
+        timeSpent: number;
+      }>;
+      userStats: {
+        totalSolved: number;
+        easySolved: number;
+        mediumSolved: number;
+        hardSolved: number;
+        streak: number;
+        longestStreak: number;
+        totalTimeSpent: number;
+        lastActiveDate: string;
+      };
+    } }>('/progress/user'),
 
   // Get progress for a specific topic
   getTopicProgress: (topicId: string) => 

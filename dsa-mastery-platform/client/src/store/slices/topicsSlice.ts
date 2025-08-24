@@ -88,6 +88,30 @@ export const deleteTopic = createAsyncThunk(
   }
 );
 
+export const createProblem = createAsyncThunk(
+  'topics/createProblem',
+  async (problemData: Partial<Problem>) => {
+    const response = await topicsAPI.createProblem(problemData);
+    return response.data.data; // Extract the Problem object from the nested structure
+  }
+);
+
+export const updateProblem = createAsyncThunk(
+  'topics/updateProblem',
+  async ({ id, data }: { id: string; data: Partial<Problem> }) => {
+    const response = await topicsAPI.updateProblem(id, data);
+    return response.data.data; // Extract the Problem object from the nested structure
+  }
+);
+
+export const deleteProblem = createAsyncThunk(
+  'topics/deleteProblem',
+  async (id: string) => {
+    await topicsAPI.deleteProblem(id);
+    return id;
+  }
+);
+
 const topicsSlice = createSlice({
   name: 'topics',
   initialState,
@@ -107,12 +131,6 @@ const topicsSlice = createSlice({
     },
     clearFilters: (state) => {
       state.filters = initialState.filters;
-    },
-    updateProblemStatus: (state, action: PayloadAction<{ problemId: string; status: string }>) => {
-      const problem = state.problems.find(p => p._id === action.payload.problemId);
-      if (problem) {
-        problem.userStatus = action.payload.status;
-      }
     },
   },
   extraReducers: (builder) => {
@@ -203,6 +221,60 @@ const topicsSlice = createSlice({
       .addCase(deleteTopic.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message || 'Failed to delete topic';
+      })
+      // Create Problem
+      .addCase(createProblem.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createProblem.fulfilled, (state, action) => {
+        state.loading = false;
+        // Add the new problem to the current topic's problems if it exists
+        if (state.currentTopic && state.currentTopic.problems) {
+          state.currentTopic.problems.push(action.payload);
+        }
+        state.error = null;
+      })
+      .addCase(createProblem.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to create problem';
+      })
+      // Update Problem
+      .addCase(updateProblem.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateProblem.fulfilled, (state, action) => {
+        state.loading = false;
+        // Update the problem in the current topic's problems if it exists
+        if (state.currentTopic && state.currentTopic.problems) {
+          const index = state.currentTopic.problems.findIndex(p => p._id === action.payload._id);
+          if (index !== -1) {
+            state.currentTopic.problems[index] = action.payload;
+          }
+        }
+        state.error = null;
+      })
+      .addCase(updateProblem.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to update problem';
+      })
+      // Delete Problem
+      .addCase(deleteProblem.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deleteProblem.fulfilled, (state, action) => {
+        state.loading = false;
+        // Remove the problem from the current topic's problems if it exists
+        if (state.currentTopic && state.currentTopic.problems) {
+          state.currentTopic.problems = state.currentTopic.problems.filter(p => p._id !== action.payload);
+        }
+        state.error = null;
+      })
+      .addCase(deleteProblem.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Failed to delete problem';
       });
   },
 });

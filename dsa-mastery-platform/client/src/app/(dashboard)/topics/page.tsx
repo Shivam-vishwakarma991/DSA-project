@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
-import { fetchTopics, createTopic, updateTopic, deleteTopic } from '@/store/slices/topicsSlice';
+import { fetchTopics, fetchTopicDetails, fetchTopicProblems, createTopic, updateTopic, deleteTopic } from '@/store/slices/topicsSlice';
 import TopicCard from '@/components/features/TopicCard';
 import TopicForm from '@/components/features/TopicForm';
 import { Loader } from '@/components/common/Loader';
@@ -70,9 +70,27 @@ export default function TopicsPage() {
     setIsFormOpen(true);
   };
 
-  const handleEditTopic = (topic: any) => {
-    setEditingTopic(topic);
-    setIsFormOpen(true);
+  const handleEditTopic = async (topic: any) => {
+    try {
+      setFormLoading(true);
+      // Fetch topic details with problems
+      const topicWithProblems = await dispatch(fetchTopicDetails(topic.slug)).unwrap();
+      const topicProblems = await dispatch(fetchTopicProblems(topic.slug)).unwrap();
+      
+      // Combine topic data with problems
+      const completeTopic = {
+        ...topicWithProblems,
+        problems: topicProblems
+      };
+      
+      setEditingTopic(completeTopic);
+      setIsFormOpen(true);
+    } catch (error) {
+      console.error('Failed to fetch topic details:', error);
+      toast.error('Failed to load topic details');
+    } finally {
+      setFormLoading(false);
+    }
   };
 
   const handleDeleteTopic = (topicId: string, topicTitle: string) => {
@@ -225,10 +243,15 @@ export default function TopicsPage() {
                 <div className="flex gap-1">
                   <button
                     onClick={() => handleEditTopic(topic)}
-                    className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    disabled={formLoading}
+                    className="p-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     title="Edit topic"
                   >
-                    <PencilIcon className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                    {formLoading ? (
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600"></div>
+                    ) : (
+                      <PencilIcon className="h-4 w-4 text-gray-600 dark:text-gray-400" />
+                    )}
                   </button>
                   <button
                     onClick={() => handleDeleteTopic(topic._id, topic.title)}
