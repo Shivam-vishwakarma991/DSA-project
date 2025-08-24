@@ -14,6 +14,9 @@ import {
   Cog6ToothIcon,
   CodeBracketIcon,
   XMarkIcon,
+  ShieldCheckIcon,
+  UsersIcon,
+  ChartPieIcon,
 } from '@heroicons/react/24/outline';
 
 const navigation = [
@@ -25,10 +28,18 @@ const navigation = [
   { name: 'Settings', href: '/settings', icon: Cog6ToothIcon },
 ];
 
+const adminNavigation = [
+  { name: 'Admin Dashboard', href: '/admin', icon: ShieldCheckIcon },
+  { name: 'User Management', href: '/admin/users', icon: UsersIcon },
+  { name: 'Analytics', href: '/admin/analytics', icon: ChartPieIcon },
+];
+
 export default function Sidebar() {
   const pathname = usePathname();
   const dispatch = useDispatch<AppDispatch>();
   const { sidebarOpen } = useSelector((state: RootState) => state.ui);
+  const { user } = useSelector((state: RootState) => state.auth);
+  const isAdmin = user?.role === 'admin';
 
   // Handle responsive sidebar behavior
   useEffect(() => {
@@ -118,6 +129,43 @@ export default function Sidebar() {
                       </Link>
                     );
                   })}
+                  
+                  {/* Admin Navigation */}
+                  {isAdmin && (
+                    <>
+                      <div className="pt-4 pb-2">
+                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                          Admin
+                        </h3>
+                      </div>
+                      {adminNavigation.map((item) => {
+                        const isActive = pathname === item.href;
+                        return (
+                          <Link
+                            key={item.name}
+                            href={item.href}
+                            onClick={() => dispatch(setSidebarOpen(false))}
+                            className={`
+                              flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
+                              ${isActive
+                                ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                              }
+                            `}
+                          >
+                            <item.icon className="h-5 w-5" />
+                            <span className="font-medium">{item.name}</span>
+                            {isActive && (
+                              <motion.div
+                                layoutId="mobile-sidebar-indicator"
+                                className="absolute left-0 w-1 h-8 bg-red-500 rounded-r-full"
+                              />
+                            )}
+                          </Link>
+                        );
+                      })}
+                    </>
+                  )}
                 </nav>
 
                 {/* Mobile Progress Summary */}
@@ -179,6 +227,42 @@ export default function Sidebar() {
                 </Link>
               );
             })}
+            
+            {/* Admin Navigation */}
+            {isAdmin && (
+              <>
+                <div className="pt-4 pb-2">
+                  <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                    Admin
+                  </h3>
+                </div>
+                {adminNavigation.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={`
+                        flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
+                        ${isActive
+                          ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }
+                      `}
+                    >
+                      <item.icon className="h-5 w-5" />
+                      <span className="font-medium">{item.name}</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="sidebar-indicator"
+                          className="absolute left-0 w-1 h-8 bg-red-500 rounded-r-full"
+                        />
+                      )}
+                    </Link>
+                  );
+                })}
+              </>
+            )}
           </nav>
 
           {/* Progress Summary */}

@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
 import { fetchTopicDetails, fetchTopicProblems } from '@/store/slices/topicsSlice';
+import { progressAPI } from '@/lib/api/progress';
 import ProblemList from '@/components/features/ProblemList';
 import ResourceLinks from '@/components/features/ResourceLinks';
 import { Loader } from '@/components/common/Loader';
@@ -24,6 +25,8 @@ export default function TopicDetailPage() {
   const { currentTopic, problems, loading } = useSelector((state: RootState) => state.topics);
   const { userProgress } = useSelector((state: RootState) => state.progress);
   const [mounted, setMounted] = useState(false);
+  const [detailedProgress, setDetailedProgress] = useState<any>(null);
+  const [loadingProgress, setLoadingProgress] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -34,14 +37,33 @@ export default function TopicDetailPage() {
     
     dispatch(fetchTopicDetails(params.slug as string));
     dispatch(fetchTopicProblems(params.slug as string));
+    
+    // Fetch detailed topic progress
+    const fetchTopicProgress = async () => {
+      try {
+        setLoadingProgress(true);
+        const response = await progressAPI.getTopicDetailedProgress(params.slug as string);
+        setDetailedProgress(response.data);
+      } catch (error) {
+        console.error('Failed to fetch topic progress:', error);
+      } finally {
+        setLoadingProgress(false);
+      }
+    };
+    
+    fetchTopicProgress();
   }, [dispatch, params.slug, mounted]);
 
   if (!mounted || loading || !currentTopic) {
     return <Loader fullScreen />;
   }
 
-  // Helper function to get completed problems count
+  // Use detailed progress data if available, otherwise fall back to Redux data
   const getCompletedProblemsCount = () => {
+    if (detailedProgress?.progress) {
+      return detailedProgress.progress.completed;
+    }
+    
     return problems.filter(p => {
       // Check if we have progress in Redux store
       const progress = userProgress.find(up => up.problemId === p._id);
@@ -53,11 +75,9 @@ export default function TopicDetailPage() {
     }).length;
   };
 
-  const topicProgress = getCompletedProblemsCount();
-
-  const progressPercentage = problems.length > 0 
-    ? (topicProgress / problems.length) * 100 
-    : 0;
+  const completedCount = getCompletedProblemsCount();
+  const progressPercentage = detailedProgress?.progress?.percentage || 
+    (problems.length > 0 ? (completedCount / problems.length) * 100 : 0);
 
   return (
     <div className="space-y-6">
@@ -96,7 +116,7 @@ export default function TopicDetailPage() {
               <div className="flex items-center gap-2">
                 <ChartBarIcon className="h-5 w-5 text-green-500" />
                 <span className="text-sm text-gray-600 dark:text-gray-400">
-                  {topicProgress} Completed
+                  {completedCount} Completed
                 </span>
               </div>
               <div className="flex items-center gap-2">

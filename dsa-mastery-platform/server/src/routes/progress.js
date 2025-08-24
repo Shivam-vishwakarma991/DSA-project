@@ -8,6 +8,7 @@ const {
   getRecentActivity,
   getTopicStats,
   getAchievements,
+  getTopicDetailedProgress,
 } = require('../controllers/progressController');
 
 const router = express.Router();
@@ -20,6 +21,9 @@ router.get('/user', getUserProgress);
 
 // Get progress for a specific topic
 router.get('/topic/:topicId', getTopicProgress);
+
+// Get detailed topic progress with problems
+router.get('/topic/:slug/detailed', getTopicDetailedProgress);
 
 // Update problem progress
 router.put('/problem/:problemId', updateProblemProgress);

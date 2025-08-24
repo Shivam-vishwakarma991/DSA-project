@@ -269,6 +269,66 @@ exports.getTopicStats = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Get specific topic progress with problem details
+// @route   GET /api/progress/topic/:slug/detailed
+// @access  Private
+exports.getTopicDetailedProgress = asyncHandler(async (req, res) => {
+  const { slug } = req.params;
+  const userId = req.user.id;
+
+  // Get topic
+  const topic = await Topic.findOne({ slug });
+  if (!topic) {
+    return res.status(404).json({
+      success: false,
+      message: 'Topic not found'
+    });
+  }
+
+  // Get all problems for this topic
+  const problems = await Problem.find({ topicId: topic._id }).sort({ order: 1 });
+
+  // Get user's progress for this topic
+  const userProgress = await Progress.find({ 
+    userId: req.user._id, 
+    topicId: topic._id 
+  });
+
+  // Create a map of problem progress
+  const progressMap = {};
+  userProgress.forEach(progress => {
+    progressMap[progress.problemId.toString()] = progress;
+  });
+
+  // Combine problems with progress
+  const problemsWithProgress = problems.map(problem => ({
+    ...problem.toObject(),
+    userProgress: progressMap[problem._id.toString()] || null,
+    userStatus: progressMap[problem._id.toString()]?.status || 'pending'
+  }));
+
+  // Calculate topic progress
+  const completedCount = userProgress.filter(p => p.status === 'completed').length;
+  const attemptedCount = userProgress.filter(p => p.status === 'attempted').length;
+  const totalProblems = problems.length;
+  const progressPercentage = totalProblems > 0 ? (completedCount / totalProblems) * 100 : 0;
+
+  res.status(200).json({
+    success: true,
+    data: {
+      topic,
+      problems: problemsWithProgress,
+      progress: {
+        total: totalProblems,
+        completed: completedCount,
+        attempted: attemptedCount,
+        pending: totalProblems - completedCount - attemptedCount,
+        percentage: Math.round(progressPercentage)
+      }
+    }
+  });
+});
+
 // @desc    Get achievements
 // @route   GET /api/progress/achievements
 // @access  Private

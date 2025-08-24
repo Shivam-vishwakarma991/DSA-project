@@ -8,6 +8,7 @@ const progressRoutes = require('./progress');
 const userRoutes = require('./users');
 const communityRoutes = require('./community');
 const leaderboardRoutes = require('./leaderboard');
+const adminRoutes = require('./admin');
 
 // Mount routes
 router.use('/auth', authRoutes);
@@ -16,6 +17,7 @@ router.use('/progress', progressRoutes);
 router.use('/users', userRoutes);
 router.use('/community', communityRoutes);
 router.use('/leaderboard', leaderboardRoutes);
+router.use('/admin', adminRoutes);
 
 // API info endpoint
 router.get('/', (req, res) => {

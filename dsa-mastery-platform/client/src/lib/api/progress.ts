@@ -40,6 +40,19 @@ export const progressAPI = {
       };
     } }>('/progress/user'),
 
+  getTopicDetailedProgress: (slug: string) =>
+    api.get<{ success: boolean; data: {
+      topic: any;
+      problems: Array<any>;
+      progress: {
+        total: number;
+        completed: number;
+        attempted: number;
+        pending: number;
+        percentage: number;
+      };
+    } }>(`/progress/topic/${slug}/detailed`),
+
   // Get progress for a specific topic
   getTopicProgress: (topicId: string) => 
     api.get<{ success: boolean; data: Progress[] }>(`/progress/topic/${topicId}`),
