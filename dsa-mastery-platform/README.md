@@ -16,7 +16,7 @@ A comprehensive Data Structures and Algorithms learning platform built with Next
 ### For Admins
 - **Comprehensive Dashboard**: Platform-wide statistics and analytics
 - **User Management**: Manage all users, roles, and permissions
-- **Content Management**: Create, edit, and manage topics and problems
+- **Topics Management**: Create, edit, and manage topics and problems
 - **Analytics**: Detailed platform usage analytics and user engagement
 - **Settings Management**: Configure platform settings and preferences
 - **Real-time Monitoring**: Track user activity and platform health
