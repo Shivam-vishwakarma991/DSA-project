@@ -10,7 +10,7 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_API_URL=http://43.204.112.237:5001
+      - NEXT_PUBLIC_API_URL=http://13.203.101.91:5001
     depends_on:
       - backend
     networks:
@@ -38,10 +38,10 @@ services:
       - NODE_ENV=production
       
       # CORS Configuration
-      - CORS_ORIGIN=http://43.204.112.237:3000
+      - CORS_ORIGIN=http://43.204.112.237:3000,http://13.203.101.91:3000,http://localhost:3000
       
       # Frontend Configuration
-      - NEXT_PUBLIC_API_URL=http://43.204.112.237:5001
+      - NEXT_PUBLIC_API_URL=http://13.203.101.91:5001
       
       # Redis Configuration
       - REDIS_URL=redis://redis:6379
