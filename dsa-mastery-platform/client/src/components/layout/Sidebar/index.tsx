@@ -32,6 +32,7 @@ const adminNavigation = [
   { name: 'Admin Dashboard', href: '/admin', icon: ShieldCheckIcon },
   { name: 'User Management', href: '/admin/users', icon: UsersIcon },
   { name: 'Analytics', href: '/admin/analytics', icon: ChartPieIcon },
+  { name: 'Settings', href: '/admin/settings', icon: Cog6ToothIcon },
 ];
 
 export default function Sidebar() {
