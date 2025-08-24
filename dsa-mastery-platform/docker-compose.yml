@@ -37,8 +37,8 @@ services:
       - PORT=5001
       - NODE_ENV=production
       
-      # CORS Configuration
-      - CORS_ORIGIN=http://43.204.112.237:3000,http://13.203.101.91:3000,http://localhost:3000
+      # CORS Configuration - Allow all origins (set to specific origins for production security)
+      # - CORS_ORIGIN=http://13.203.101.91:3000,http://localhost:3000
       
       # Frontend Configuration
       - NEXT_PUBLIC_API_URL=http://13.203.101.91:5001
