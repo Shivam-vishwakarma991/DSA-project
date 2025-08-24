@@ -52,6 +52,7 @@ interface RecentActivity {
 
 export default function ProgressPage() {
   const { user } = useAuth();
+  console.log('🔍 User:', user);
   const dispatch = useDispatch<AppDispatch>();
   const { userProgress, statistics, streak, achievements, loading } = useSelector((state: RootState) => state.progress);
 

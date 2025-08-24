@@ -40,9 +40,20 @@ export default function TopicDetailPage() {
     return <Loader fullScreen />;
   }
 
-  const topicProgress = problems.filter(p => 
-    userProgress.some(up => up.problemId === p._id && up.status === 'completed')
-  ).length;
+  // Helper function to get completed problems count
+  const getCompletedProblemsCount = () => {
+    return problems.filter(p => {
+      // Check if we have progress in Redux store
+      const progress = userProgress.find(up => up.problemId === p._id);
+      if (progress) {
+        return progress.status === 'completed';
+      }
+      // If no progress in Redux, use the userStatus from the problem data
+      return p.userStatus === 'completed';
+    }).length;
+  };
+
+  const topicProgress = getCompletedProblemsCount();
 
   const progressPercentage = problems.length > 0 
     ? (topicProgress / problems.length) * 100 

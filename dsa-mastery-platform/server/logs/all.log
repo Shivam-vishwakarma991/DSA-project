@@ -340,3 +340,8 @@
 2025-08-23 21:22:50:2250 [33mwarn[39m: [33mMongoDB disconnected[39m
 2025-08-23 21:41:28:4128 [33mwarn[39m: [33mMongoDB disconnected[39m
 2025-08-23 21:42:43:4243 [33mwarn[39m: [33mMongoDB disconnected[39m
+2025-08-24 10:41:22:4122 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 10:42:15:4215 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 10:42:26:4226 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 10:42:26:4226 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 10:42:26:4226 [32minfo[39m: [32m📝 Environment: development[39m

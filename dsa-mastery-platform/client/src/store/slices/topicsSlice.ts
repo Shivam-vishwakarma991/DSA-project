@@ -98,6 +98,13 @@ const topicsSlice = createSlice({
     setFilters: (state, action: PayloadAction<Partial<TopicsState['filters']>>) => {
       state.filters = { ...state.filters, ...action.payload };
     },
+    updateProblemStatus: (state, action: PayloadAction<{ problemId: string; status: string }>) => {
+      const { problemId, status } = action.payload;
+      const problem = state.problems.find(p => p._id === problemId);
+      if (problem) {
+        problem.userStatus = status;
+      }
+    },
     clearFilters: (state) => {
       state.filters = initialState.filters;
     },

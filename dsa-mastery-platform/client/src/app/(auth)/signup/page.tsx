@@ -161,7 +161,7 @@ export default function SignupPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-md w-full space-y-8"
+            className="max-w-md w-full space-y-8 p-4 "
           >
             {/* Logo & Title */}
             <div className="text-center">
@@ -186,55 +186,58 @@ export default function SignupPage() {
 
             {/* Signup Form */}
             <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-              {/* Full Name */}
-              <div>
-                <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Full Name
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <UserIcon className="h-5 w-5 text-gray-400" />
+              {/* Personal Information - Row 1 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Full Name */}
+                <div>
+                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Full Name
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <UserIcon className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      {...register('fullName')}
+                      type="text"
+                      autoComplete="name"
+                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition-colors"
+                      placeholder="John Doe"
+                    />
                   </div>
-                  <input
-                    {...register('fullName')}
-                    type="text"
-                    autoComplete="name"
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition-colors"
-                    placeholder="John Doe"
-                  />
+                  {errors.fullName && (
+                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      {errors.fullName.message}
+                    </p>
+                  )}
                 </div>
-                {errors.fullName && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-                    {errors.fullName.message}
-                  </p>
-                )}
+
+                {/* Username */}
+                <div>
+                  <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Username
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <span className="text-gray-400">@</span>
+                    </div>
+                    <input
+                      {...register('username')}
+                      type="text"
+                      autoComplete="username"
+                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition-colors"
+                      placeholder="johndoe"
+                    />
+                  </div>
+                  {errors.username && (
+                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      {errors.username.message}
+                    </p>
+                  )}
+                </div>
               </div>
 
-              {/* Username */}
-              <div>
-                <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Username
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <span className="text-gray-400">@</span>
-                  </div>
-                  <input
-                    {...register('username')}
-                    type="text"
-                    autoComplete="username"
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition-colors"
-                    placeholder="johndoe"
-                  />
-                </div>
-                {errors.username && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-                    {errors.username.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Email */}
+              {/* Email - Full Width */}
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Email Address
@@ -258,98 +261,101 @@ export default function SignupPage() {
                 )}
               </div>
 
-              {/* Password */}
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <LockClosedIcon className="h-5 w-5 text-gray-400" />
-                  </div>
-                  <input
-                    {...register('password')}
-                    type={showPassword ? 'text' : 'password'}
-                    autoComplete="new-password"
-                    className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition-colors"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  >
-                    {showPassword ? (
-                      <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                    ) : (
-                      <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                    )}
-                  </button>
-                </div>
-                
-                {/* Password Requirements */}
-                <div className="mt-2 space-y-1">
-                  {passwordRequirements.map((req, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <div className={`w-4 h-4 rounded-full ${
-                        req.met ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
-                      }`}>
-                        {req.met && (
-                          <CheckIcon className="h-4 w-4 text-white p-0.5" />
-                        )}
-                      </div>
-                      <span className={`text-xs ${
-                        req.met ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'
-                      }`}>
-                        {req.text}
-                      </span>
+              {/* Password Fields - Row 2 */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Password */}
+                <div>
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Password
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <LockClosedIcon className="h-5 w-5 text-gray-400" />
                     </div>
-                  ))}
-                </div>
-                
-                {errors.password && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-
-              {/* Confirm Password */}
-              <div>
-                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Confirm Password
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <LockClosedIcon className="h-5 w-5 text-gray-400" />
+                    <input
+                      {...register('password')}
+                      type={showPassword ? 'text' : 'password'}
+                      autoComplete="new-password"
+                      className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition-colors"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    >
+                      {showPassword ? (
+                        <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      ) : (
+                        <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      )}
+                    </button>
                   </div>
-                  <input
-                    {...register('confirmPassword')}
-                    type={showConfirmPassword ? 'text' : 'password'}
-                    autoComplete="new-password"
-                    className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition-colors"
-                    placeholder="••••••••"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                    ) : (
-                      <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
-                    )}
-                  </button>
+                  
+                  {/* Password Requirements */}
+                  <div className="mt-2 space-y-1">
+                    {passwordRequirements.map((req, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <div className={`w-4 h-4 rounded-full ${
+                          req.met ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'
+                        }`}>
+                          {req.met && (
+                            <CheckIcon className="h-4 w-4 text-white p-0.5" />
+                          )}
+                        </div>
+                        <span className={`text-xs ${
+                          req.met ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400'
+                        }`}>
+                          {req.text}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  {errors.password && (
+                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      {errors.password.message}
+                    </p>
+                  )}
                 </div>
-                {errors.confirmPassword && (
-                  <p className="mt-2 text-sm text-red-600 dark:text-red-400">
-                    {errors.confirmPassword.message}
-                  </p>
-                )}
+
+                {/* Confirm Password */}
+                <div>
+                  <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <LockClosedIcon className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      {...register('confirmPassword')}
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      autoComplete="new-password"
+                      className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition-colors"
+                      placeholder="••••••••"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                    >
+                      {showConfirmPassword ? (
+                        <EyeSlashIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      ) : (
+                        <EyeIcon className="h-5 w-5 text-gray-400 hover:text-gray-600" />
+                      )}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && (
+                    <p className="mt-2 text-sm text-red-600 dark:text-red-400">
+                      {errors.confirmPassword.message}
+                    </p>
+                  )}
+                </div>
               </div>
 
-              {/* Terms and Conditions */}
+              {/* Terms and Conditions - Full Width */}
               <div className="flex items-start">
                 <div className="flex items-center h-5">
                   <input

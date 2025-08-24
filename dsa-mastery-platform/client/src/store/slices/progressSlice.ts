@@ -134,10 +134,10 @@ const progressSlice = createSlice({
       .addCase(updateProgress.fulfilled, (state, action) => {
         // Handle the progress update - add to recent activity
         if (action.payload && typeof action.payload === 'object') {
-          // Add to recent activity if it's a valid progress object
-          const progressData = action.payload as any;
-          if (progressData._id) {
-            const index = state.userProgress.findIndex(p => p._id === progressData._id);
+          // The API response has the progress data nested under 'data'
+          const progressData = action.payload.data || action.payload;
+          if (progressData && progressData._id) {
+            const index = state.userProgress.findIndex(p => p.problemId === progressData.problemId);
             if (index !== -1) {
               state.userProgress[index] = progressData;
             } else {
