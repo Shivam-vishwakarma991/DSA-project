@@ -387,6 +387,23 @@ exports.getRecentActivity = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Get all user progress
+// @route   GET /api/progress/all
+// @access  Private
+exports.getAllUserProgress = asyncHandler(async (req, res) => {
+  const userId = req.user.id;
+
+  const allProgress = await Progress.find({ userId })
+    .populate('problemId', 'title difficulty')
+    .populate('topicId', 'title')
+    .sort({ lastAttemptDate: -1 });
+
+  res.status(200).json({
+    success: true,
+    data: allProgress
+  });
+});
+
 // @desc    Get topic completion stats
 // @route   GET /api/progress/topics
 // @access  Private

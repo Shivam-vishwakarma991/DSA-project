@@ -6,6 +6,7 @@ const {
   updateProblemProgress,
   getStreakInfo,
   getRecentActivity,
+  getAllUserProgress,
   getTopicStats,
   getAchievements,
   getTopicDetailedProgress,
@@ -33,6 +34,9 @@ router.get('/streak', getStreakInfo);
 
 // Get recent activity
 router.get('/recent', getRecentActivity);
+
+// Get all user progress
+router.get('/all', getAllUserProgress);
 
 // Get topic completion stats
 router.get('/topics', getTopicStats);

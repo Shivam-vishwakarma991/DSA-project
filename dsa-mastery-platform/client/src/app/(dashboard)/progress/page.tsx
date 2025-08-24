@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/lib/hooks/useAuth';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
-import { fetchUserProgress, fetchRecentActivity, fetchStats, fetchStreak, fetchAchievements } from '@/store/slices/progressSlice';
+import { fetchUserProgress, fetchRecentActivity, fetchStats, fetchStreak, fetchAchievements, fetchAllUserProgress } from '@/store/slices/progressSlice';
 import { 
   ChartBarIcon, 
   TrophyIcon, 
@@ -18,6 +18,7 @@ import {
 import ProgressChart from '@/components/dashboard/ProgressChart';
 import { Card } from '@/components/common/Card';
 import { Loader } from '@/components/common/Loader';
+import toast from 'react-hot-toast';
 
 interface ProgressStats {
   totalSolved: number;
@@ -61,6 +62,7 @@ export default function ProgressPage() {
   console.log('statistics.completionStats:', statistics?.completionStats);
   console.log('statistics.data?.completionStats:', statistics?.data?.completionStats);
   console.log('userProgress:', userProgress);
+  console.log('userProgress.length:', userProgress.length);
   console.log('achievements:', achievements);
   console.log('streak:', streak);
   console.log('=== END DEBUG ===');
@@ -102,6 +104,7 @@ export default function ProgressPage() {
         
         // Fetch additional data
         await Promise.all([
+          dispatch(fetchAllUserProgress()).unwrap(),
           dispatch(fetchRecentActivity(10)).unwrap(),
           dispatch(fetchStats()).unwrap(),
           dispatch(fetchStreak()).unwrap(),
@@ -115,6 +118,15 @@ export default function ProgressPage() {
     };
 
     fetchProgressData();
+  }, [dispatch, mounted, user]);
+
+  // Refresh progress data when component mounts to ensure latest data
+  useEffect(() => {
+    if (mounted && user) {
+      // Force refresh to get the latest progress data
+      dispatch(fetchAllUserProgress());
+      dispatch(fetchUserProgress());
+    }
   }, [dispatch, mounted, user]);
 
   // Update stats when data is loaded
@@ -266,12 +278,37 @@ export default function ProgressPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            Your Progress
-          </h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Track your learning journey and celebrate your achievements
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                Your Progress
+              </h1>
+              <p className="text-gray-600 dark:text-gray-400">
+                Track your learning journey and celebrate your achievements
+              </p>
+            </div>
+            <button
+              onClick={async () => {
+                try {
+                  await Promise.all([
+                    dispatch(fetchUserProgress()),
+                    dispatch(fetchAllUserProgress()),
+                    dispatch(fetchStats()),
+                    dispatch(fetchStreak())
+                  ]);
+                  toast.success('Progress data refreshed!');
+                } catch (error) {
+                  toast.error('Failed to refresh progress data');
+                }
+              }}
+              className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              Refresh
+            </button>
+          </div>
         </motion.div>
 
         {/* Completion Summary */}

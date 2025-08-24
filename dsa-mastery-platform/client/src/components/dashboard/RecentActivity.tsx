@@ -7,6 +7,7 @@ import {
   ArrowPathIcon,
   ChevronRightIcon 
 } from '@heroicons/react/24/outline';
+import { Loader } from '@/components/common/Loader';
 
 interface RecentActivityProps {
   activities: Progress[] | undefined;
@@ -98,26 +99,18 @@ export default function RecentActivity({ activities }: RecentActivityProps) {
                   Problem #{activity.problemId.slice(-4)}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {getStatusText(activity.status)} • {getTimeAgo(activity.updatedAt)}
+                  {getStatusText(activity.status)} • {getTimeAgo(activity.lastAttemptDate)}
                 </p>
+                {activity.timeSpent > 0 && (
+                  <p className="text-xs text-gray-400 dark:text-gray-500">
+                    Time spent: {activity.timeSpent} min
+                  </p>
+                )}
               </div>
             </div>
-            
-            <ChevronRightIcon className="h-4 w-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" />
+            <ChevronRightIcon className="h-4 w-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300" />
           </motion.div>
         ))}
-      </div>
-
-      {/* Activity Summary */}
-      <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400">
-          <span>Total activities today</span>
-          <span className="font-medium text-gray-900 dark:text-white">
-            {activities.filter(a => 
-              new Date(a.updatedAt).toDateString() === new Date().toDateString()
-            ).length}
-          </span>
-        </div>
       </div>
     </div>
   );

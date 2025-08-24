@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Problem, Progress } from '@/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
-import { updateProgress, fetchUserProgress } from '@/store/slices/progressSlice';
+import { updateProgress, fetchUserProgress, fetchAllUserProgress } from '@/store/slices/progressSlice';
 import { updateProblemStatus } from '@/store/slices/topicsSlice';
 import {
   CheckCircleIcon,
@@ -25,6 +25,21 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
   const { userProgress } = useSelector((state: RootState) => state.progress);
   const [expandedProblem, setExpandedProblem] = useState<string | null>(null);
 
+  // Sync problem status with user progress data
+  useEffect(() => {
+    if (userProgress.length > 0 && problems.length > 0) {
+      userProgress.forEach(progress => {
+        const problem = problems.find(p => p._id === progress.problemId);
+        if (problem && problem.userStatus !== progress.status) {
+          dispatch(updateProblemStatus({ 
+            problemId: progress.problemId, 
+            status: progress.status 
+          }));
+        }
+      });
+    }
+  }, [userProgress, problems, dispatch]);
+
   // Helper function to get problem status
   const getProblemStatus = (problemId: string) => {
     // First check if we have user progress in Redux store
@@ -46,6 +61,17 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
         return progress.status === 'completed';
       }
       return p.userStatus === 'completed';
+    }).length;
+  };
+
+  // Helper function to get attempted problems count (including completed)
+  const getAttemptedProblemsCount = () => {
+    return problems.filter(p => {
+      const progress = userProgress.find(up => up.problemId === p._id);
+      if (progress) {
+        return progress.status === 'attempted' || progress.status === 'completed';
+      }
+      return p.userStatus === 'attempted' || p.userStatus === 'completed';
     }).length;
   };
 
@@ -86,11 +112,17 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
       dispatch(updateProblemStatus({ problemId, status }));
       
       // Refresh user progress to get the latest data
-      await dispatch(fetchUserProgress());
+      await Promise.all([
+        dispatch(fetchUserProgress()),
+        dispatch(fetchAllUserProgress())
+      ]);
       
       // Clear time input after successful update
       setTimeSpent(prev => ({ ...prev, [problemId]: 0 }));
       setShowTimeInput(prev => ({ ...prev, [problemId]: false }));
+      
+      // Auto-expand the problem when status is updated
+      setExpandedProblem(problemId);
       
       // Show success message based on status
       if (status === 'completed') {
@@ -138,6 +170,19 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
     }
   };
 
+  const getStatusButtonColor = (status: string) => {
+    switch (status) {
+      case 'completed':
+        return 'bg-green-500 hover:bg-green-600 text-white';
+      case 'attempted':
+        return 'bg-yellow-500 hover:bg-yellow-600 text-white';
+      case 'revisit':
+        return 'bg-blue-500 hover:bg-blue-600 text-white';
+      default:
+        return 'bg-gray-500 hover:bg-gray-600 text-white';
+    }
+  };
+
   return (
     <div className="space-y-4">
       {problems.map((problem, index) => {
@@ -156,6 +201,7 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
                   <div className="flex-shrink-0 relative">
                     <button
                       onClick={() => {
+                        setExpandedProblem(isExpanded ? null : problem._id);
                         if (updatingStatus[problem._id]) return; // Prevent multiple clicks
                         const nextStatus = getNextStatus(status);
                         if (nextStatus === 'completed' || nextStatus === 'attempted') {
@@ -178,55 +224,7 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
                     </button>
                     
                     {/* Time Input Popup */}
-                    {showTimeInput[problem._id] && (
-                      <div 
-                        ref={(el) => { timeInputRefs.current[problem._id] = el; }}
-                        className="absolute top-8 left-0 z-10 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-3 min-w-48"
-                      >
-                        <div className="flex flex-col gap-2">
-                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Time spent (minutes):
-                          </label>
-                          <input
-                            type="number"
-                            min="0"
-                            value={timeSpent[problem._id] || ''}
-                            onChange={(e) => setTimeSpent(prev => ({ 
-                              ...prev, 
-                              [problem._id]: parseInt(e.target.value) || 0 
-                            }))}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                handleStatusUpdate(problem._id, getNextStatus(status));
-                              } else if (e.key === 'Escape') {
-                                setShowTimeInput(prev => ({ ...prev, [problem._id]: false }));
-                                setTimeSpent(prev => ({ ...prev, [problem._id]: 0 }));
-                              }
-                            }}
-                            className="px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                            placeholder="Enter time in minutes"
-                            autoFocus
-                          />
-                          <div className="flex gap-2 mt-2">
-                            <button
-                              onClick={() => handleStatusUpdate(problem._id, getNextStatus(status))}
-                              className="px-3 py-1 text-xs bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors"
-                            >
-                              Update
-                            </button>
-                            <button
-                              onClick={() => {
-                                setShowTimeInput(prev => ({ ...prev, [problem._id]: false }));
-                                setTimeSpent(prev => ({ ...prev, [problem._id]: 0 }));
-                              }}
-                              className="px-3 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+               
                   </div>
 
                   {/* Problem Info */}
@@ -323,13 +321,127 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
                         </span>
                       </div>
                     </div>
+                    
+                    {/* Status Action Buttons */}
+                    <div className="flex flex-wrap gap-2 mb-3">
+                      <button
+                        onClick={() => {
+                          if (status !== 'attempted') {
+                            setShowTimeInput(prev => ({ ...prev, [problem._id]: true }));
+                            setTimeSpent(prev => ({ ...prev, [problem._id]: 0 }));
+                          }
+                        }}
+                        disabled={updatingStatus[problem._id] || status === 'attempted'}
+                        className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
+                          status === 'attempted' 
+                            ? 'bg-yellow-500 text-white cursor-default' 
+                            : 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-200 dark:hover:bg-yellow-800'
+                        }`}
+                      >
+                        Attempted
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (status !== 'completed') {
+                            setShowTimeInput(prev => ({ ...prev, [problem._id]: true }));
+                            setTimeSpent(prev => ({ ...prev, [problem._id]: 0 }));
+                          }
+                        }}
+                        disabled={updatingStatus[problem._id] || status === 'completed'}
+                        className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
+                          status === 'completed' 
+                            ? 'bg-green-500 text-white cursor-default' 
+                            : 'bg-green-100 text-green-800 hover:bg-green-200 dark:bg-green-900 dark:text-green-200 dark:hover:bg-green-800'
+                        }`}
+                      >
+                        Completed
+                      </button>
+                      <button
+                        onClick={() => handleStatusUpdate(problem._id, 'revisit')}
+                        disabled={updatingStatus[problem._id] || status === 'revisit'}
+                        className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
+                          status === 'revisit' 
+                            ? 'bg-blue-500 text-white cursor-default' 
+                            : 'bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:hover:bg-blue-800'
+                        }`}
+                      >
+                        Mark for Revisit
+                      </button>
+                      <button
+                        onClick={() => handleStatusUpdate(problem._id, 'pending')}
+                        disabled={updatingStatus[problem._id] || status === 'pending'}
+                        className={`px-3 py-1 text-xs rounded font-medium transition-colors ${
+                          status === 'pending' 
+                            ? 'bg-gray-500 text-white cursor-default' 
+                            : 'bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500'
+                        }`}
+                      >
+                        Reset to Not Started
+                      </button>
+                    </div>
+
+                    {/* Time Input for Status Update */}
+                    {showTimeInput[problem._id] && (
+                      <div className="mb-3 p-3 bg-white dark:bg-gray-600 rounded border">
+                        <div className="flex items-center gap-2">
+                          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Time spent (minutes):
+                          </label>
+                          <input
+                            type="number"
+                            min="0"
+                            value={timeSpent[problem._id] || ''}
+                            onChange={(e) => setTimeSpent(prev => ({ 
+                              ...prev, 
+                              [problem._id]: parseInt(e.target.value) || 0 
+                            }))}
+                            className="px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent w-20"
+                            placeholder="0"
+                            autoFocus
+                          />
+                          <button
+                            onClick={() => {
+                              const nextStatus = status === 'pending' ? 'attempted' : 'completed';
+                              handleStatusUpdate(problem._id, nextStatus);
+                            }}
+                            className="px-3 py-1 text-xs bg-primary-600 text-white rounded hover:bg-primary-700 transition-colors"
+                          >
+                            Update
+                          </button>
+                          <button
+                            onClick={() => {
+                              setShowTimeInput(prev => ({ ...prev, [problem._id]: false }));
+                              setTimeSpent(prev => ({ ...prev, [problem._id]: 0 }));
+                            }}
+                            className="px-3 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-gray-500 dark:text-gray-400">
-                        Topic Progress:
+                        Overall Progress:
                       </span>
                       <div className="flex-1 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
                         <div 
-                          className="bg-primary-500 h-2 rounded-full transition-all duration-300"
+                          className="bg-gradient-to-r from-yellow-500 to-green-500 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${((getCompletedProblemsCount() + getAttemptedProblemsCount()) / problems.length) * 100}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {getCompletedProblemsCount() + getAttemptedProblemsCount()}/{problems.length}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        Completed:
+                      </span>
+                      <div className="flex-1 bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                        <div 
+                          className="bg-green-500 h-2 rounded-full transition-all duration-300"
                           style={{ width: `${(getCompletedProblemsCount() / problems.length) * 100}%` }}
                         />
                       </div>

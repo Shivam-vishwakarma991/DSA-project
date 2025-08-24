@@ -77,6 +77,15 @@ export const fetchRecentActivity = createAsyncThunk(
   }
 );
 
+export const fetchAllUserProgress = createAsyncThunk(
+  'progress/fetchAllUserProgress',
+  async () => {
+    const response = await progressAPI.getAllUserProgress();
+    console.log('📊 fetchAllUserProgress response:', response.data);
+    return response.data;
+  }
+);
+
 export const fetchAchievements = createAsyncThunk(
   'progress/fetchAchievements',
   async () => {
@@ -182,11 +191,17 @@ const progressSlice = createSlice({
       .addCase(fetchRecentActivity.fulfilled, (state, action) => {
         if (Array.isArray(action.payload)) {
           console.log('🕒 Storing recent activity:', action.payload);
-          state.userProgress = action.payload as Progress[];
-          // Update statistics with recent activity
+          // Don't overwrite userProgress, just update statistics
           if (state.statistics) {
             state.statistics.recentActivity = action.payload;
           }
+        }
+      })
+      // Fetch All User Progress
+      .addCase(fetchAllUserProgress.fulfilled, (state, action) => {
+        if (Array.isArray(action.payload)) {
+          console.log('📊 Storing all user progress:', action.payload);
+          state.userProgress = action.payload;
         }
       })
       // Fetch Achievements

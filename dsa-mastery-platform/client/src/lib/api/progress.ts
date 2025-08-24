@@ -77,6 +77,10 @@ export const progressAPI = {
   getRecentActivity: (limit?: number) => 
     api.get<{ success: boolean; data: Progress[] }>(`/progress/recent?limit=${limit || 10}`),
 
+  // Get all user progress records
+  getAllUserProgress: () => 
+    api.get<{ success: boolean; data: Progress[] }>('/progress/all'),
+
   // Get topic completion stats
   getTopicStats: () => 
     api.get<{ success: boolean; data: any }>('/progress/topics'),
