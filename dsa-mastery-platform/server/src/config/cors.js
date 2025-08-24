@@ -1,7 +1,6 @@
 const corsOptions = {
     origin: function (origin, callback) {
-      // Allow all origins for development/production flexibility
-      // You can restrict this later by setting CORS_ORIGIN environment variable
+      // Allow all origins since we're not using credentials
       const allowedOrigins = process.env.CORS_ORIGIN 
         ? process.env.CORS_ORIGIN.split(',').map(origin => origin.trim())
         : true; // Allow all origins when CORS_ORIGIN is not set
@@ -21,7 +20,7 @@ const corsOptions = {
         callback(null, true);
       }
     },
-    credentials: true,
+    credentials: false, // Changed to false since we're using JWT tokens
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Origin', 'Accept'],
     exposedHeaders: ['X-Total-Count', 'X-Page-Count'],

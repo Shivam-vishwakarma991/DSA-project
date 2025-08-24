@@ -38,3 +38,14 @@ export const authAPI = {
   getCurrentUser: () => 
     api.get<{ success: boolean; data: User }>('/users/profile'),
 };
+
+// Export individual functions for convenience
+export const login = authAPI.login;
+export const register = authAPI.register;
+export const logout = authAPI.logout;
+export const refreshToken = authAPI.refreshToken;
+export const forgotPassword = authAPI.forgotPassword;
+export const resetPassword = authAPI.resetPassword;
+export const verifyEmail = authAPI.verifyEmail;
+export const updatePassword = authAPI.updatePassword;
+export const getCurrentUser = authAPI.getCurrentUser;

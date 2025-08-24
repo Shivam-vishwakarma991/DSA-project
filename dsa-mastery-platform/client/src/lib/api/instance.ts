@@ -6,7 +6,7 @@ const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001') + '
 // Create axios instance
 const api = axios.create({
   baseURL: API_URL,
-  withCredentials: true,
+  withCredentials: false, // Changed to false since we're using JWT tokens, not cookies
   headers: {
     'Content-Type': 'application/json',
   },

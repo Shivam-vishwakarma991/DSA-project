@@ -1,7 +1,7 @@
 #!/bin/bash
 
-echo "🔧 Fixing CORS and Port Configuration Issues..."
-echo "================================================"
+echo "🔧 Fixing CORS, Port Configuration, and Missing Pages Issues..."
+echo "==============================================================="
 
 # Stop all containers
 echo "🛑 Stopping all containers..."
