@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
 import { fetchTopicDetails, fetchTopicProblems } from '@/store/slices/topicsSlice';
+import { fetchUserProgress } from '@/store/slices/progressSlice';
 import { progressAPI } from '@/lib/api/progress';
 import ProblemList from '@/components/features/ProblemList';
 import ResourceLinks from '@/components/features/ResourceLinks';
@@ -15,7 +16,8 @@ import {
   ChartBarIcon,
   CodeBracketIcon,
   BookOpenIcon,
-  ArrowLeftIcon 
+  ArrowLeftIcon,
+  ClockIcon
 } from '@heroicons/react/24/outline';
 
 export default function TopicDetailPage() {
@@ -23,7 +25,7 @@ export default function TopicDetailPage() {
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { currentTopic, problems, loading } = useSelector((state: RootState) => state.topics);
-  const { userProgress } = useSelector((state: RootState) => state.progress);
+  const { userProgress, statistics } = useSelector((state: RootState) => state.progress);
   const [mounted, setMounted] = useState(false);
   const [detailedProgress, setDetailedProgress] = useState<any>(null);
   const [loadingProgress, setLoadingProgress] = useState(false);
@@ -37,6 +39,7 @@ export default function TopicDetailPage() {
     
     dispatch(fetchTopicDetails(params.slug as string));
     dispatch(fetchTopicProblems(params.slug as string));
+    dispatch(fetchUserProgress()); // Fetch user progress to ensure we have latest data
     
     // Fetch detailed topic progress
     const fetchTopicProgress = async () => {
@@ -64,6 +67,15 @@ export default function TopicDetailPage() {
       return detailedProgress.progress.completed;
     }
     
+    // If we have topic progress in statistics, use that
+    if (statistics?.topicProgress) {
+      const topicProgress = statistics?.topicProgress?.find((tp: any) => tp.topicSlug === params.slug);
+      if (topicProgress) {
+        return topicProgress.completed;
+      }
+    }
+    
+    // Fallback to filtering problems
     return problems.filter(p => {
       // Check if we have progress in Redux store
       const progress = userProgress.find(up => up.problemId === p._id);
@@ -75,7 +87,31 @@ export default function TopicDetailPage() {
     }).length;
   };
 
+  const getAttemptedProblemsCount = () => {
+    if (detailedProgress?.progress) {
+      return detailedProgress.progress.attempted;
+    }
+    
+    // If we have topic progress in statistics, use that
+    if (statistics?.topicProgress) {
+      const topicProgress = statistics?.topicProgress?.find((tp: any) => tp.topicSlug === params.slug);
+      if (topicProgress) {
+        return topicProgress.attempted;
+      }
+    }
+    
+    // Fallback to filtering problems
+    return problems.filter(p => {
+      const progress = userProgress.find(up => up.problemId === p._id);
+      if (progress) {
+        return progress.status === 'attempted';
+      }
+      return p.userStatus === 'attempted';
+    }).length;
+  };
+
   const completedCount = getCompletedProblemsCount();
+  const attemptedCount = getAttemptedProblemsCount();
   const progressPercentage = detailedProgress?.progress?.percentage || 
     (problems.length > 0 ? (completedCount / problems.length) * 100 : 0);
 
@@ -117,6 +153,12 @@ export default function TopicDetailPage() {
                 <ChartBarIcon className="h-5 w-5 text-green-500" />
                 <span className="text-sm text-gray-600 dark:text-gray-400">
                   {completedCount} Completed
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ClockIcon className="h-5 w-5 text-yellow-500" />
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {attemptedCount} Attempted
                 </span>
               </div>
               <div className="flex items-center gap-2">

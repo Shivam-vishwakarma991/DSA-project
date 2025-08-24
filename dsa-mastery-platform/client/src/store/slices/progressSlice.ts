@@ -4,7 +4,7 @@ import { Progress, UserStats, StreakInfo } from '../../types';
 
 interface ProgressState {
   userProgress: Progress[];
-  statistics: UserStats | null;
+  statistics: any;
   streak: StreakInfo | null;
   leaderboard: any[];
   achievements: any[];
@@ -28,6 +28,7 @@ export const fetchUserProgress = createAsyncThunk(
   'progress/fetchUserProgress',
   async () => {
     const response = await progressAPI.getUserProgress();
+    console.log('🔍 fetchUserProgress response:', response.data);
     return response.data;
   }
 );
@@ -53,6 +54,7 @@ export const fetchStats = createAsyncThunk(
   'progress/fetchStats',
   async () => {
     const response = await progressAPI.getTopicStats();
+    console.log('📊 fetchStats response:', response.data);
     return response.data;
   }
 );
@@ -61,6 +63,7 @@ export const fetchStreak = createAsyncThunk(
   'progress/fetchStreak',
   async () => {
     const response = await progressAPI.getStreakInfo();
+    console.log('🔥 fetchStreak response:', response.data);
     return response.data;
   }
 );
@@ -69,6 +72,7 @@ export const fetchRecentActivity = createAsyncThunk(
   'progress/fetchRecentActivity',
   async (limit?: number) => {
     const response = await progressAPI.getRecentActivity(limit);
+    console.log('🕒 fetchRecentActivity response:', response.data);
     return response.data;
   }
 );
@@ -77,7 +81,8 @@ export const fetchAchievements = createAsyncThunk(
   'progress/fetchAchievements',
   async () => {
     const response = await progressAPI.getAchievements();
-    return response.data.data;
+    console.log('🏆 fetchAchievements response:', response.data);
+    return response.data;
   }
 );
 
@@ -114,16 +119,9 @@ const progressSlice = createSlice({
       })
       .addCase(fetchUserProgress.fulfilled, (state, action) => {
         state.loading = false;
-        // Handle the comprehensive progress data structure
-        if (action.payload && typeof action.payload === 'object') {
-          // Store the entire payload as statistics since it contains all the data
-          state.statistics = action.payload;
-          
-          // Extract recent activity for userProgress
-          if ('recentActivity' in action.payload && Array.isArray(action.payload.recentActivity)) {
-            state.userProgress = action.payload.recentActivity;
-          }
-        }
+        console.log('📊 Storing statistics from fetchUserProgress:', action.payload);
+        // Store the comprehensive progress data
+        state.statistics = action.payload;
         state.lastSync = new Date().toISOString();
       })
       .addCase(fetchUserProgress.rejected, (state, action) => {
@@ -132,45 +130,69 @@ const progressSlice = createSlice({
       })
       // Update Progress
       .addCase(updateProgress.fulfilled, (state, action) => {
-        // Handle the progress update - add to recent activity
+        // Handle the progress update
         if (action.payload && typeof action.payload === 'object') {
-          // The API response has the progress data nested under 'data'
           const progressData = action.payload.data || action.payload;
-          if (progressData && progressData._id) {
+          if (progressData && typeof progressData === 'object' && '_id' in progressData && 'problemId' in progressData) {
             const index = state.userProgress.findIndex(p => p.problemId === progressData.problemId);
             if (index !== -1) {
-              state.userProgress[index] = progressData;
+              state.userProgress[index] = progressData as Progress;
             } else {
-              state.userProgress.unshift(progressData);
+              state.userProgress.unshift(progressData as Progress);
             }
           }
         }
       })
       // Fetch Stats
       .addCase(fetchStats.fulfilled, (state, action) => {
-        // The data is already extracted in the thunk
         if (action.payload) {
-          state.statistics = action.payload as any;
+          console.log('📊 Storing topic progress from fetchStats:', action.payload);
+          // Update statistics with topic stats
+          if (state.statistics) {
+            state.statistics.topicProgress = action.payload;
+          } else {
+            state.statistics = { topicProgress: action.payload };
+          }
         }
       })
       // Fetch Streak
       .addCase(fetchStreak.fulfilled, (state, action) => {
-        // The data is already extracted in the thunk
-        if (action.payload) {
-          state.streak = action.payload as any;
+        if (action.payload && typeof action.payload === 'object' && 'current' in action.payload) {
+          const streakData = action.payload as any;
+          console.log('🔥 Storing streak data:', streakData);
+          state.streak = {
+            current: streakData.current,
+            longest: streakData.longest,
+            lastActiveDate: streakData.lastActiveDate,
+            streakDates: streakData.streakDates || [],
+            gapDays: streakData.gapDays || 0
+          };
+          // Update statistics with streak data
+          if (state.statistics) {
+            state.statistics.userStats = {
+              ...state.statistics.userStats,
+              streak: streakData.current,
+              longestStreak: streakData.longest,
+              lastActiveDate: streakData.lastActiveDate
+            };
+          }
         }
       })
       // Fetch Recent Activity
       .addCase(fetchRecentActivity.fulfilled, (state, action) => {
-        // The data is already extracted in the thunk
         if (Array.isArray(action.payload)) {
-          state.userProgress = action.payload;
+          console.log('🕒 Storing recent activity:', action.payload);
+          state.userProgress = action.payload as Progress[];
+          // Update statistics with recent activity
+          if (state.statistics) {
+            state.statistics.recentActivity = action.payload;
+          }
         }
       })
       // Fetch Achievements
       .addCase(fetchAchievements.fulfilled, (state, action) => {
-        // The data is already extracted in the thunk
         if (Array.isArray(action.payload)) {
+          console.log('🏆 Storing achievements:', action.payload);
           state.achievements = action.payload;
         }
       });

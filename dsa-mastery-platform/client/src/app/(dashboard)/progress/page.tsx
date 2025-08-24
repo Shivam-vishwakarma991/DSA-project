@@ -30,42 +30,7 @@ interface ProgressStats {
   accuracy: number;
   topicsCompleted: number;
   totalTopics: number;
-}
-
-interface ApiStatistics {
-  completionStats: {
-    total: number;
-    completed: number;
-    attempted: number;
-    percentage: number;
-  };
-  topicProgress: Array<{
-    _id: string;
-    topicName: string;
-    topicSlug: string;
-    total: number;
-    completed: number;
-    attempted: number;
-    percentage: number;
-  }>;
-  recentActivity: Array<{
-    _id: string;
-    problemTitle: string;
-    topic: string;
-    status: string;
-    date: string;
-    timeSpent: number;
-  }>;
-  userStats: {
-    totalSolved: number;
-    easySolved: number;
-    mediumSolved: number;
-    hardSolved: number;
-    streak: number;
-    longestStreak: number;
-    totalTimeSpent: number;
-    lastActiveDate: string;
-  };
+  totalAttempted: number;
 }
 
 interface TopicProgress {
@@ -88,9 +53,17 @@ interface RecentActivity {
 
 export default function ProgressPage() {
   const { user } = useAuth();
-  console.log('🔍 User:', user);
   const dispatch = useDispatch<AppDispatch>();
   const { userProgress, statistics, streak, achievements, loading } = useSelector((state: RootState) => state.progress);
+  console.log('=== REDUX STATE DEBUG ===');
+  console.log('statistics:', statistics);
+  console.log('statistics.data:', statistics?.data);
+  console.log('statistics.completionStats:', statistics?.completionStats);
+  console.log('statistics.data?.completionStats:', statistics?.data?.completionStats);
+  console.log('userProgress:', userProgress);
+  console.log('achievements:', achievements);
+  console.log('streak:', streak);
+  console.log('=== END DEBUG ===');
 
   const [stats, setStats] = useState<ProgressStats>({
     totalSolved: 0,
@@ -102,7 +75,8 @@ export default function ProgressPage() {
     totalTimeSpent: 0,
     accuracy: 0,
     topicsCompleted: 0,
-    totalTopics: 50,
+    totalTopics: 0,
+    totalAttempted: 0,
   });
   const [topicProgress, setTopicProgress] = useState<TopicProgress[]>([]);
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
@@ -115,18 +89,28 @@ export default function ProgressPage() {
   useEffect(() => {
     if (!mounted || !user) return;
 
+    console.log('🔄 Fetching progress data for user:', user.email);
+
     // Fetch all progress data
     const fetchProgressData = async () => {
       try {
+        console.log('📊 Starting to fetch progress data...');
+        
+        // Fetch user progress first (this contains the main data)
+        await dispatch(fetchUserProgress()).unwrap();
+        console.log('✅ fetchUserProgress completed');
+        
+        // Fetch additional data
         await Promise.all([
-          dispatch(fetchUserProgress()).unwrap(),
           dispatch(fetchRecentActivity(10)).unwrap(),
           dispatch(fetchStats()).unwrap(),
           dispatch(fetchStreak()).unwrap(),
           dispatch(fetchAchievements()).unwrap(),
         ]);
+        
+        console.log('✅ All progress data fetched successfully');
       } catch (error) {
-        console.error('Failed to fetch progress data:', error);
+        console.error('❌ Failed to fetch progress data:', error);
       }
     };
 
@@ -136,74 +120,70 @@ export default function ProgressPage() {
   // Update stats when data is loaded
   useEffect(() => {
     if (statistics) {
-      console.log('📊 Progress Data Loaded:', {
-        statistics,
-        userProgress: userProgress.length,
-        topicProgress: topicProgress.length,
-        achievements: achievements.length,
-        achievementsData: achievements
-      });
+      console.log('📊 Processing statistics:', statistics);
       
       try {
-        // The statistics object should contain the comprehensive progress data
-        const completionStats = (statistics as any).completionStats;
-        const userStats = (statistics as any).userStats;
+        // The data is nested under statistics.data
+        const completionStats = statistics.data?.completionStats;
+        const userStats = statistics.data?.userStats;
         
-        // Calculate total time spent from recent activity
-        const totalTimeSpent = userProgress.reduce((total, activity) => total + (activity.timeSpent || 0), 0);
+        console.log('📈 Completion stats:', completionStats);
+        console.log('👤 User stats:', userStats);
         
-        // Calculate accuracy from completion stats
-        const accuracy = completionStats?.percentage || 0;
-        
-        setStats({
-          totalSolved: userStats?.totalSolved || 0,
-          easySolved: userStats?.easySolved || 0,
-          mediumSolved: userStats?.mediumSolved || 0,
-          hardSolved: userStats?.hardSolved || 0,
-          streak: userStats?.streak || 0,
-          longestStreak: userStats?.longestStreak || 0,
-          totalTimeSpent: totalTimeSpent,
-          accuracy: accuracy,
-          topicsCompleted: topicProgress.filter(t => t.percentage === 100).length,
-          totalTopics: topicProgress.length,
-        });
+        if (completionStats && userStats) {
+          // Calculate total time spent from userStats
+          const totalTimeSpent = userStats.totalTimeSpent || 0;
+          
+          // Calculate accuracy from completion stats
+          const accuracy = completionStats.percentage || 0;
+          
+          // Calculate total attempted from completion stats
+          const totalAttempted = completionStats.attempted || 0;
+          
+          const newStats = {
+            totalSolved: userStats.totalSolved || 0,
+            easySolved: userStats.easySolved || 0,
+            mediumSolved: userStats.mediumSolved || 0,
+            hardSolved: userStats.hardSolved || 0,
+            streak: userStats.streak || 0,
+            longestStreak: userStats.longestStreak || 0,
+            totalTimeSpent: totalTimeSpent,
+            accuracy: accuracy,
+            topicsCompleted: topicProgress.filter(t => t.percentage === 100).length,
+            totalTopics: topicProgress.length,
+            totalAttempted: totalAttempted,
+          };
+          
+          console.log('📊 Setting new stats:', newStats);
+          setStats(newStats);
+        }
       } catch (error) {
-        console.error('Error processing statistics:', error);
+        console.error('❌ Error processing statistics:', error);
         console.log('Statistics object:', statistics);
-        // Set default values if there's an error
-        setStats({
-          totalSolved: 0,
-          easySolved: 0,
-          mediumSolved: 0,
-          hardSolved: 0,
-          streak: 0,
-          longestStreak: 0,
-          totalTimeSpent: 0,
-          accuracy: 0,
-          topicsCompleted: 0,
-          totalTopics: 0,
-        });
       }
     }
-  }, [statistics, userProgress, topicProgress]);
+  }, [statistics, topicProgress]);
 
   // Update topic progress when data is loaded
   useEffect(() => {
-    if (statistics) {
+    if (statistics?.data?.topicProgress) {
+      console.log('📚 Processing topic progress from statistics.data.topicProgress:', statistics.data.topicProgress);
       try {
-        const topicProgressData = (statistics as any)?.topicProgress;
-        if (topicProgressData && Array.isArray(topicProgressData)) {
-          setTopicProgress(topicProgressData.map((topic) => ({
+        const topicProgressData = statistics.data.topicProgress;
+        if (Array.isArray(topicProgressData)) {
+          const mappedTopics = topicProgressData.map((topic) => ({
             topic: topic.topicName,
             slug: topic.topicSlug,
             total: topic.total,
             completed: topic.completed,
             attempted: topic.attempted,
             percentage: topic.percentage,
-          })));
+          }));
+          console.log('📚 Mapped topic progress:', mappedTopics);
+          setTopicProgress(mappedTopics);
         }
       } catch (error) {
-        console.error('Error processing topic progress:', error);
+        console.error('❌ Error processing topic progress:', error);
         setTopicProgress([]);
       }
     }
@@ -211,17 +191,34 @@ export default function ProgressPage() {
 
   // Update recent activity when data is loaded
   useEffect(() => {
-    if (userProgress && userProgress.length > 0) {
-      setRecentActivity(userProgress.slice(0, 10).map((activity: any) => ({
+    if (statistics?.data?.recentActivity) {
+      console.log('🕒 Processing recent activity from statistics.data.recentActivity:', statistics.data.recentActivity);
+      const recentActivityData = statistics.data.recentActivity;
+      if (Array.isArray(recentActivityData)) {
+        const mappedActivity = recentActivityData.map((activity: any) => ({
+          _id: activity._id,
+          problemTitle: activity.problemTitle || 'Unknown Problem',
+          topic: activity.topic || 'Unknown Topic',
+          status: activity.status,
+          date: activity.date || activity.updatedAt || activity.createdAt,
+          timeSpent: activity.timeSpent || 0,
+        }));
+        console.log('🕒 Mapped recent activity:', mappedActivity);
+        setRecentActivity(mappedActivity);
+      }
+    } else if (userProgress && userProgress.length > 0) {
+      console.log('🕒 Using userProgress for recent activity:', userProgress);
+      const mappedActivity = userProgress.slice(0, 10).map((activity: any) => ({
         _id: activity._id,
         problemTitle: activity.problemTitle || 'Unknown Problem',
         topic: activity.topic || 'Unknown Topic',
         status: activity.status,
         date: activity.date || activity.updatedAt || activity.createdAt,
         timeSpent: activity.timeSpent || 0,
-      })));
+      }));
+      setRecentActivity(mappedActivity);
     }
-  }, [userProgress]);
+  }, [statistics, userProgress]);
 
   // Debug achievements data
   useEffect(() => {
@@ -232,7 +229,7 @@ export default function ProgressPage() {
     });
   }, [achievements]);
 
-  if (!mounted || loading || !statistics) {
+  if (!mounted || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Loader fullScreen text="Loading your progress..." />
@@ -278,7 +275,7 @@ export default function ProgressPage() {
         </motion.div>
 
         {/* Completion Summary */}
-        {statistics && (statistics as any)?.completionStats ? (
+        {statistics?.data?.completionStats ? (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -290,18 +287,11 @@ export default function ProgressPage() {
                 <div>
                   <h2 className="text-2xl font-bold mb-2">Your Learning Journey</h2>
                   <p className="text-primary-100">
-                    {(() => {
-                      const completionStats = (statistics as any)?.completionStats;
-                      if (!completionStats) return 'Loading...';
-                      return `${completionStats.completed} problems completed • ${completionStats.attempted} attempted • ${completionStats.total} total problems`;
-                    })()}
+                    {statistics.data.completionStats.completed} problems completed • {statistics.data.completionStats.attempted} attempted • {statistics.data.completionStats.total} total problems
                   </p>
                 </div>
                 <div className="text-right">
-                  <div className="text-4xl font-bold">{(() => {
-                    const completionStats = (statistics as any)?.completionStats;
-                    return completionStats ? completionStats.percentage : 0;
-                  })()}%</div>
+                  <div className="text-4xl font-bold">{statistics.data.completionStats.percentage}%</div>
                   <div className="text-primary-100">Completion Rate</div>
                 </div>
               </div>
@@ -349,6 +339,19 @@ export default function ProgressPage() {
             </div>
           </Card>
 
+          <Card className="bg-gradient-to-br from-yellow-500 to-yellow-600 text-white">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-yellow-100">Total Attempted</p>
+                <p className="text-3xl font-bold">{stats.totalAttempted}</p>
+                <p className="text-yellow-200 text-sm">
+                  Problems in progress
+                </p>
+              </div>
+              <ExclamationTriangleIcon className="h-12 w-12 text-yellow-200" />
+            </div>
+          </Card>
+
           <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white">
             <div className="flex items-center justify-between">
               <div>
@@ -359,19 +362,6 @@ export default function ProgressPage() {
                 </p>
               </div>
               <FireIcon className="h-12 w-12 text-green-200" />
-            </div>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-100">Completion Rate</p>
-                <p className="text-3xl font-bold">{stats.accuracy}%</p>
-                <p className="text-purple-200 text-sm">
-                  {stats.topicsCompleted}/{stats.totalTopics} topics
-                </p>
-              </div>
-              <TrophyIcon className="h-12 w-12 text-purple-200" />
             </div>
           </Card>
 
@@ -386,7 +376,7 @@ export default function ProgressPage() {
                   }
                 </p>
                 <p className="text-orange-200 text-sm">
-                  {userProgress.length} activities
+                  {recentActivity.length} activities
                 </p>
               </div>
               <ClockIcon className="h-12 w-12 text-orange-200" />

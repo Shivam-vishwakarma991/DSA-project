@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Problem, Progress } from '@/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/store';
-import { updateProgress } from '@/store/slices/progressSlice';
+import { updateProgress, fetchUserProgress } from '@/store/slices/progressSlice';
 import { updateProblemStatus } from '@/store/slices/topicsSlice';
 import {
   CheckCircleIcon,
@@ -84,6 +84,9 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
       
       // Update the problem status in the topics slice as well
       dispatch(updateProblemStatus({ problemId, status }));
+      
+      // Refresh user progress to get the latest data
+      await dispatch(fetchUserProgress());
       
       // Clear time input after successful update
       setTimeSpent(prev => ({ ...prev, [problemId]: 0 }));
@@ -184,26 +187,26 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
                           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                             Time spent (minutes):
                           </label>
-                                                     <input
-                             type="number"
-                             min="0"
-                             value={timeSpent[problem._id] || ''}
-                             onChange={(e) => setTimeSpent(prev => ({ 
-                               ...prev, 
-                               [problem._id]: parseInt(e.target.value) || 0 
-                             }))}
-                             onKeyDown={(e) => {
-                               if (e.key === 'Enter') {
-                                 handleStatusUpdate(problem._id, getNextStatus(status));
-                               } else if (e.key === 'Escape') {
-                                 setShowTimeInput(prev => ({ ...prev, [problem._id]: false }));
-                                 setTimeSpent(prev => ({ ...prev, [problem._id]: 0 }));
-                               }
-                             }}
-                             className="px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                             placeholder="Enter time in minutes"
-                             autoFocus
-                           />
+                          <input
+                            type="number"
+                            min="0"
+                            value={timeSpent[problem._id] || ''}
+                            onChange={(e) => setTimeSpent(prev => ({ 
+                              ...prev, 
+                              [problem._id]: parseInt(e.target.value) || 0 
+                            }))}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') {
+                                handleStatusUpdate(problem._id, getNextStatus(status));
+                              } else if (e.key === 'Escape') {
+                                setShowTimeInput(prev => ({ ...prev, [problem._id]: false }));
+                                setTimeSpent(prev => ({ ...prev, [problem._id]: 0 }));
+                              }
+                            }}
+                            className="px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                            placeholder="Enter time in minutes"
+                            autoFocus
+                          />
                           <div className="flex gap-2 mt-2">
                             <button
                               onClick={() => handleStatusUpdate(problem._id, getNextStatus(status))}
@@ -356,9 +359,8 @@ export default function ProblemList({ problems, topicId }: ProblemListProps) {
                   )}
                 </div>
               )}
-              </div>
             </div>
-        
+          </div>
         );
       })}
     </div>
