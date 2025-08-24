@@ -467,3 +467,10 @@
 2025-08-24 15:43:27:4327 [32minfo[39m: [32m🚀 Server running on port 5002[39m
 2025-08-24 15:43:27:4327 [32minfo[39m: [32m📝 Environment: development[39m
 2025-08-24 15:44:22:4422 [32minfo[39m: [32mUser logged in: shivamvishwakarma212@gmail.com[39m
+2025-08-24 15:54:39:5439 [33mwarn[39m: [33mMongoDB disconnected[39m
+2025-08-24 15:54:56:5456 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 15:54:56:5456 [32minfo[39m: [32m🚀 Server running on port 5002[39m
+2025-08-24 15:54:56:5456 [32minfo[39m: [32m📝 Environment: development[39m
+2025-08-24 15:55:15:5515 [32minfo[39m: [32mUser logged in: admin@dsamastery.com[39m
+2025-08-24 15:59:46:5946 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m
+2025-08-24 16:00:10:010 [32minfo[39m: [32m✅ MongoDB Connected: ac-mfkot5u-shard-00-00.sfhwddx.mongodb.net[39m

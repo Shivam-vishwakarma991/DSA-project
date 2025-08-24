@@ -17,9 +17,11 @@ import {
   ShieldCheckIcon,
   UsersIcon,
   ChartPieIcon,
+  WrenchScrewdriverIcon,
+  DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 
-const navigation = [
+const studentNavigation = [
   { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
   { name: 'Topics', href: '/topics', icon: AcademicCapIcon },
   { name: 'Progress', href: '/progress', icon: ChartBarIcon },
@@ -32,7 +34,8 @@ const adminNavigation = [
   { name: 'Admin Dashboard', href: '/admin', icon: ShieldCheckIcon },
   { name: 'User Management', href: '/admin/users', icon: UsersIcon },
   { name: 'Analytics', href: '/admin/analytics', icon: ChartPieIcon },
-  { name: 'Settings', href: '/admin/settings', icon: Cog6ToothIcon },
+  { name: 'Topics Management', href: '/topics', icon: DocumentTextIcon },
+  { name: 'System Settings', href: '/admin/settings', icon: WrenchScrewdriverIcon },
 ];
 
 export default function Sidebar() {
@@ -41,6 +44,9 @@ export default function Sidebar() {
   const { sidebarOpen } = useSelector((state: RootState) => state.ui);
   const { user } = useSelector((state: RootState) => state.auth);
   const isAdmin = user?.role === 'admin';
+
+  // Use appropriate navigation based on user role
+  const navigation = isAdmin ? adminNavigation : studentNavigation;
 
   // Handle responsive sidebar behavior
   useEffect(() => {
@@ -88,10 +94,10 @@ export default function Sidebar() {
               <div className="flex flex-col h-full">
                 {/* Mobile Header */}
                 <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-                  <Link href="/dashboard" className="flex items-center gap-2">
+                  <Link href={isAdmin ? "/admin" : "/dashboard"} className="flex items-center gap-2">
                     <CodeBracketIcon className="h-8 w-8 text-primary-500" />
                     <span className="text-xl font-bold text-gray-900 dark:text-white">
-                      DSA Mastery
+                      {isAdmin ? 'Admin Panel' : 'DSA Mastery'}
                     </span>
                   </Link>
                   <button
@@ -114,7 +120,9 @@ export default function Sidebar() {
                         className={`
                           flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
                           ${isActive
-                            ? 'bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400'
+                            ? isAdmin 
+                              ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                              : 'bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400'
                             : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                           }
                         `}
@@ -124,64 +132,43 @@ export default function Sidebar() {
                         {isActive && (
                           <motion.div
                             layoutId="mobile-sidebar-indicator"
-                            className="absolute left-0 w-1 h-8 bg-primary-500 rounded-r-full"
+                            className={`absolute left-0 w-1 h-8 rounded-r-full ${
+                              isAdmin ? 'bg-red-500' : 'bg-primary-500'
+                            }`}
                           />
                         )}
                       </Link>
                     );
                   })}
-                  
-                  {/* Admin Navigation */}
-                  {isAdmin && (
-                    <>
-                      <div className="pt-4 pb-2">
-                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                          Admin
-                        </h3>
-                      </div>
-                      {adminNavigation.map((item) => {
-                        const isActive = pathname === item.href;
-                        return (
-                          <Link
-                            key={item.name}
-                            href={item.href}
-                            onClick={() => dispatch(setSidebarOpen(false))}
-                            className={`
-                              flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
-                              ${isActive
-                                ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
-                                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                              }
-                            `}
-                          >
-                            <item.icon className="h-5 w-5" />
-                            <span className="font-medium">{item.name}</span>
-                            {isActive && (
-                              <motion.div
-                                layoutId="mobile-sidebar-indicator"
-                                className="absolute left-0 w-1 h-8 bg-red-500 rounded-r-full"
-                              />
-                            )}
-                          </Link>
-                        );
-                      })}
-                    </>
-                  )}
                 </nav>
 
-                {/* Mobile Progress Summary */}
-                <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-                  <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg p-4 text-white">
-                    <h3 className="font-semibold mb-2">Daily Goal</h3>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm">2 of 3 problems</span>
-                      <span className="text-sm">67%</span>
-                    </div>
-                    <div className="w-full bg-white/20 rounded-full h-2">
-                      <div className="bg-white rounded-full h-2 w-2/3" />
+                {/* Mobile Footer - Only show for students */}
+                {!isAdmin && (
+                  <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg p-4 text-white">
+                      <h3 className="font-semibold mb-2">Daily Goal</h3>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm">2 of 3 problems</span>
+                        <span className="text-sm">67%</span>
+                      </div>
+                      <div className="w-full bg-white/20 rounded-full h-2">
+                        <div className="bg-white rounded-full h-2 w-2/3" />
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
+
+                {/* Admin Footer */}
+                {isAdmin && (
+                  <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+                    <div className="bg-gradient-to-r from-red-500 to-red-600 rounded-lg p-4 text-white">
+                      <h3 className="font-semibold mb-2">Admin Panel</h3>
+                      <p className="text-sm text-red-100">
+                        Manage users, content, and system settings
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
           </>
@@ -193,10 +180,10 @@ export default function Sidebar() {
         <div className="flex flex-col flex-grow bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700">
           {/* Logo */}
           <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-            <Link href="/dashboard" className="flex items-center gap-2">
+            <Link href={isAdmin ? "/admin" : "/dashboard"} className="flex items-center gap-2">
               <CodeBracketIcon className="h-8 w-8 text-primary-500" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                DSA Mastery
+                {isAdmin ? 'Admin Panel' : 'DSA Mastery'}
               </span>
             </Link>
           </div>
@@ -212,7 +199,9 @@ export default function Sidebar() {
                   className={`
                     flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
                     ${isActive
-                      ? 'bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400'
+                      ? isAdmin 
+                        ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
+                        : 'bg-primary-100 dark:bg-primary-900 text-primary-600 dark:text-primary-400'
                       : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
                     }
                   `}
@@ -222,63 +211,43 @@ export default function Sidebar() {
                   {isActive && (
                     <motion.div
                       layoutId="sidebar-indicator"
-                      className="absolute left-0 w-1 h-8 bg-primary-500 rounded-r-full"
+                      className={`absolute left-0 w-1 h-8 rounded-r-full ${
+                        isAdmin ? 'bg-red-500' : 'bg-primary-500'
+                      }`}
                     />
                   )}
                 </Link>
               );
             })}
-            
-            {/* Admin Navigation */}
-            {isAdmin && (
-              <>
-                <div className="pt-4 pb-2">
-                  <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Admin
-                  </h3>
-                </div>
-                {adminNavigation.map((item) => {
-                  const isActive = pathname === item.href;
-                  return (
-                    <Link
-                      key={item.name}
-                      href={item.href}
-                      className={`
-                        flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
-                        ${isActive
-                          ? 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400'
-                          : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'
-                        }
-                      `}
-                    >
-                      <item.icon className="h-5 w-5" />
-                      <span className="font-medium">{item.name}</span>
-                      {isActive && (
-                        <motion.div
-                          layoutId="sidebar-indicator"
-                          className="absolute left-0 w-1 h-8 bg-red-500 rounded-r-full"
-                        />
-                      )}
-                    </Link>
-                  );
-                })}
-              </>
-            )}
           </nav>
 
-          {/* Progress Summary */}
-          <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg p-4 text-white">
-              <h3 className="font-semibold mb-2">Daily Goal</h3>
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm">2 of 3 problems</span>
-                <span className="text-sm">67%</span>
-              </div>
-              <div className="w-full bg-white/20 rounded-full h-2">
-                <div className="bg-white rounded-full h-2 w-2/3" />
+          {/* Footer - Only show for students */}
+          {!isAdmin && (
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-lg p-4 text-white">
+                <h3 className="font-semibold mb-2">Daily Goal</h3>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm">2 of 3 problems</span>
+                  <span className="text-sm">67%</span>
+                </div>
+                <div className="w-full bg-white/20 rounded-full h-2">
+                  <div className="bg-white rounded-full h-2 w-2/3" />
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
+          {/* Admin Footer */}
+          {isAdmin && (
+            <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="bg-gradient-to-r from-red-500 to-red-600 rounded-lg p-4 text-white">
+                <h3 className="font-semibold mb-2">Admin Panel</h3>
+                <p className="text-sm text-red-100">
+                  Manage users, content, and system settings
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </>
