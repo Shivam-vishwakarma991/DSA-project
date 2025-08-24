@@ -1,7 +1,7 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = 'http://13.203.101.91:5001/api';
 
 // Create axios instance
 const api = axios.create({

@@ -1,11 +1,8 @@
 const corsOptions = {
     origin: function (origin, callback) {
       const allowedOrigins = [
-        'http://localhost:3000',
-        'http://localhost:3001',
-        'https://dsamastery.com',
-        process.env.FRONTEND_URL,
-      ].filter(Boolean);
+        'http://43.204.112.237:3000'
+      ]
   
       // Allow requests with no origin (like mobile apps or Postman)
       if (!origin || allowedOrigins.indexOf(origin) !== -1) {
